@@ -52,20 +52,15 @@ d$Q14_8_TEXT <- NULL
 d$Q18_12_TEXT <- NULL
 d$Q25 <- NULL
 
-# Most records here look OK, putting aside that respondents clearly did not want to provide
-# any info on their publication (including month or year).
-invalid_journal_names1 <- c("","A","B","F","G","J","M","O")
-subset(d, journal %in% invalid_journal_names1)
-# Not quite sure what to do with them. (TODO)
-
-
-
 # These records look strange. Besides the journal names and year (9999), all the answers that were given are the same. Furthermore, only questions with numberical answers
 # were answered.
-invalid_journal_names2 <- c("TEST","Test Journal")
-subset(d, journal %in% invalid_journal_names2)
+invalid_journal_names <- c("","A","B","F","G","J","M","O", "TEST","Test Journal")
+subset(d, journal %in% invalid_journal_names)
 # Let's exclude them
-d <- subset(d, !journal %in% invalid_journal_names2)
+d <- subset(d, !journal %in% invalid_journal_names)
+
+
+sort(unique(d$journal))
 
 
 ### Recode responses to all questions using the agree-disagree scale
@@ -134,6 +129,11 @@ several_values <- num_nonempty(cur_d) > 1
 cur_d[several_values,] <- ""
 # collect all responses in one column
 d$Q11_3 <- unique_nonempty(cur_d)
+
+
+write.csv(d, file="./JDAP 2_clean.csv")
+
+
 
 ### Recode responses to question 12
 cur_d <- d[,paste0("Q12_",1:6)]
