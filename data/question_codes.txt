@@ -1,0 +1,136 @@
+Q1 - The impact of public data archiving policies  /  on attitudes, experiences, and practices of authors...
+(Q2_1-4 - Timing)
+Q3 - For the purpose of this survey, consider a dataset to be the collected or measured data points that...
+
+
+Q4 How strongly do you disagree/agree with the following statements? It is the community norm in my field to share, with qualified researchers, datasets that support the results of peer-reviewed research articles. Include data sharing that occurs by any mechanism (e.g. emailing datasets upon request, posting
+datasets to lab websites, including datasets in journal supplementary information or data repositories).
+
+Q5 - It is the community norm in my field to publicly archive all supporting datasets online, for use by anyone for any purpose, upon publication of a peer-reviewed research article.
+
+(Q6_1-4 Timing)
+
+
+Q7 - Do any of your published research papers have publicly archived datasets?
+
+(Q8_1-Q8-4 Timing)
+
+
+Q9 -
+To your knowledge, how often have you experienced the following situations as a result of sharing the datasets behind your published research with investigators outside your research groups? Include experiences from datasets shared outside your research groups through any mechanism, including public archiving, selected distribution, or shared individually upon request (for example, in response to an email request).
+
+Q9_1 I formed new collaborations
+Q9_2 I formed new collaborations that led/are leading to publications
+Q9_3 I formed new collaborations that led/are leading to grants
+Q9_4 Others have used my datasets and formally cited me
+Q9_5 Others have used my datasets but did not formally cite me
+Q9_7 Others have found errors in my research through my datasets
+Q9_8 Others misinterpreted my datasets or used them inappropriately
+Q9_9 I have had ongoing research projects scooped by another scientist
+Q9_10 I have had future research plans scooped by another scientist
+Q9_11 The ability of a junior colleague in my group (graduate student, postdoctoral fellow, or junior faculty member) to publish subsequent research has been compromised
+Q9_12 My ability to receive commercial benefit from my research has been diminished
+Q9_13 I spent a lot of money preparing data for sharing
+Q9_14 I spent a lot of time preparing data for sharing
+Q9_15 I spent a lot of time answering questions from qualified researchers about my shared data
+Q9_17 I spent a lot of time answering questions from unqualified researchers about my shared data
+
+Q9_16 Other (please specify)
+Q9_16_TEXT - Enered text
+
+(Q10_1-4 - Timing)
+
+Q11 - To your knowledge, what are the policies of these stakeholders as they apply to online public archiving of the datasets asso ciated with your (month) (year) publication in (journal)? Choose all that apply
+	Q11_1 - The journal
+	Q11_2 - Your funder(s)
+	Q11_3 - Your employer or institution
+
+Q12 - Are all datasets associated with your (month) (year) publication in (journal) publicly available online?
+	Q12_1 -> ALL datasets are publicly available online 
+	Q12_2 -> SOME but not all of the datasets are publicly available online 
+	Q12_3 -> NONE of the datasets are publicly available online 
+	Q12_4 -> I don't know 
+	Q12_5 -> We did not collect any data for that publication 
+	Q12_6 -> Other (please specify) 
+	-> Q12_6_TEXT
+
+Q13 - IF ALL or SOME datasets associated with this paper are publicly available, where are the datasets hosted?
+	Q13_1 -> Journal supplementary information
+	Q13_2 -> A repository for data or research output
+	Q13_3 -> A personal or lab website
+	Q13_4 -> The entire dataset is in the body of the paper
+	Q13_5 -> Other (please specify)
+		  -> Q13_5_TEXT
+	Q13_6 -> Not applicable
+
+
+Q14 - If NONE or only SOME of the datasets are publicly available, which of the following reflect your experience for the dataset(s) not publicly available, for this paper? Choose all that apply.
+
+	Q14_1 -> The dataset has been submitted to a repository and is currently under embargo
+	Q14_2 -> We plan to publicly archive the dataset in the future
+	Q14_3 -> We plan to share the dataset upon request
+	Q14_4 -> We hadn't considered publicly archiving the dataset
+	Q14_5 -> We considered publicly archiving data and decided not to
+	Q14_6 -> We wanted to publicly archive the data but were not able to, due to resource limitations
+	Q14_7 -> We wanted to publicly archive the data but were not able to, for other reasons
+	Q14_8 -> Other (please specify)
+		  -> Q14_8_TEXT
+	Q14_9-> Not applicable
+	Q14_10 -> We wanted to publicly archive the data but were not able to, due to licencing or funder restrictions
+
+(Q15_1-4 - Timing)
+
+
+
+(Q16 - The questions below refer to the Joint Data Archiving Policy, an example policy statement adopted by ...)
+
+
+Q17 - How strongly do you disagree/agree with this statement? I would seek alternative journals if I learned that my target journal had adopted the Joint Data Archiving Policy (above).
+
+Q18 - Imagine you just found a great journal to target when submitting your next manuscript. You read the Instruction to Authors and discover the journal adheres to the Joint Data Archiving Policy (above). How strongly do you disagree/agree with the fo llo wing statements? I am worried that ...
+
+	Q18_1 -> others might do research I am currently working on
+	Q18_2 -> others might do research I am planning to do
+	Q18_3 -> others might find errors in my research
+	Q18_4 -> others might misinterpret my dataset or use it inappropriately
+	Q18_5 -> I/we might be bothered with a lot of questions by qualified people
+	Q18_6 -> I/we might be bothered with a lot of questions by unqualified people
+	Q18_7 -> I/we might not be able to find the data
+	Q18_8 -> it might take me/us a lot of time to find the data
+	Q18_9 -> it might take me/us a lot of time to format or document the data
+	Q18_10 -> it might take me/us a lot of time to submit the data
+	Q18_11 -> I might lose intellectual property or commercial opportunities
+	Q18_12 -> Other worries (please specify)
+	 	   -> Q18_12_TEXT
+
+Q19 - Same instructions as the previous question: Imagine you just found a great journal to target when submitting your next manuscript. You read the Instruction to Authors and discover the journal adheres to the Joint Data Archiving Policy (above). How strongly do you disagree/agree with the following statements? I am pleased because...
+
+	Q19_1 -> others will build upon my work more easily
+	Q19_2 -> I will get more citations
+	Q19_3 -> I will form more collaborations
+	Q19_4 -> the contribution will be valued by my promotion or tenure committee
+	Q19_5 -> the contribution will be valued by my funders
+	Q19_6 -> I will be able to reuse other work more easily
+	Q19_7 -> I will be able to reuse other work more often
+	Q19_8 -> my scientific area will progress more quickly
+	Q19_9 -> my scientific area will develop better tools and/or training
+	Q19_10 -> I think it is the right thing to do
+	Q19_11 -> Other (please specify)
+	 		-> Q19_11_TEXT
+
+(Q20_1-4 Timing-First Click)
+
+Q21 - How strongly do you disagree/agree with the following statements? Using datasets collected by investigators outside my research group is important in my research.
+
+Q22 - Using datasets collected by investigators outside my research group is important in my teaching or other non-research projects.
+
+Q23 - Please choose the title that most closely matches yours:
+	-> Q23_TEXT
+
+(Q24_1-4 Timing)
+
+Q25 - Do you have any comments on the topic, or suggestions for how to improve this questionnaire?
+
+Q26 - Thank you for completing this survey! If you would like to enter the drawing for a $20 Amazon gif...
+
+(Q27_1 - Timing-First Click)

@@ -1,58 +1,125 @@
 ---
-title: "Untitled"
+title: "Preliminary data analysis"
 output: html_document
 ---
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+## Data pre-processing
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Let's take a look at the numbers of responses by response date and publication date. Please keep in mind that the JDAP adoption dates used in the following analysis are approximate.
 
-```{r}
+```{r, cache=TRUE, message=FALSE, echo=FALSE}
 
 library(parsedate)
 library(dplyr)
 library(zoo)
-
-(load("./JDAP 2_clean.rda"))
 library(ggplot2)
+library(assertthat)
 
-d$PublicationDate <- parse_date(with(d, paste(month, year))) %>% as.yearqtr %>% as.character # as.yearqtr # as.yearmon
-d$StartDate <- parse_date(d$StartDate) %>% as.yearqtr %>% as.character
+load("./data/JDAP 2_clean.rda")
+load("./data/jdap_dates.rda")
 
+# add the journal info to the main dataset
+assert_that( all(d$journal %in% dates$journal) )
+d <- left_join(d, dates, by="journal")
 
-x <- group_by(d, StartDate, Q=Q5) %>% dplyr::summarize(N.resp=length(StartDate)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total)
-x$date <- parse_date(x$StartDate)
-x <- x[order(x$date),]
+# format publication and response dates
+d$PublicationDate <- parse_date(with(d, paste(month, year)))
+d$ResponseDate <- parse_date(d$StartDate) %>% as.yearmon %>% as.POSIXct
 
-View(x)
-x$StartDate
-subset(x, N.total > 1000)
+d$ResponseDate_YM <- as.yearmon(d$ResponseDate) %>% as.character
+d$ResponseDate_YQ <- as.yearqtr(d$ResponseDate) %>% as.character
+d$ResponseDate_Y <- strftime(d$ResponseDate, "%Y") %>% as.character
 
-ggplot(data=x) + aes(StartDate, P.resp, fill=Q)+geom_bar(stat="identity") #, order=Response, , fill=Q4
+d$PublicationDate_YM <- as.yearmon(d$PublicationDate) %>% as.character
+d$PublicationDate_YQ <- as.yearqtr(d$PublicationDate) %>% as.character
+d$PublicationDate_Y  <- strftime(d$PublicationDate, "%Y") %>% as.character
 
+# determine time since JDAP introduction in the journal where the article was published
+d$DaysPolicyToPublication <- difftime(d$PublicationDate, parse_date(d$policy_start), units="days")
+d$DaysPolicyToResponse <- difftime(d$ResponseDate, parse_date(d$policy_start), units="days") 
 
+d$PolicyAdoptedAtPublication <- ifelse(d$DaysPolicyToPublication>0, "After JDAP", "Before JDAP")
+d$PolicyAdoptedAtResponse <- ifelse(d$DaysPolicyToResponse>0, "After JDAP", "Before JDAP")
+d$PolicyAdoptedAtPublication[is.na(d$PolicyAdoptedAtPublication)] <- "No JDAP"
+d$PolicyAdoptedAtResponse[is.na(d$PolicyAdoptedAtResponse)] <- "No JDAP"
+d$PolicyBinary <- ifelse(d$policy=="Required", "JDAP", "No JDAP")
 
-ggplot(d, aes(StartDate, Q4))+geom_bar(stat="identity")
+# number of responses by response date and journal policy in 2015
+group_by(d, Date=ResponseDate_YQ, policy) %>% dplyr::summarize(N=length(StartDate)) %>% ggplot(aes(Date, N, color=policy, group=policy))+geom_point()+geom_line()+theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Number of participants by response date.")
 
-qplot(Q4, data=d, geom="bar", fill=Q4)+facet_wrap(~StartDate)
+# number of responses by publication date and journal policy in 2015
+group_by(d, Date=PublicationDate_YQ, policy) %>% dplyr::summarize(N=length(PublicationDate)) %>% ggplot(aes(Date, N, color=policy, group=policy))+geom_point()+geom_line()+theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Number of participants by publication date.")
 
-
-library(HH)
-
-head(d)
-
-?likert
-
-
-likert(t(apply(data, 2, table)))
-
-summary(cars)
+# It seems to make more sense to focus on the publication date for plotting, until it is clear why there are hardly any responses from the second half of 2013.
 ```
 
-You can also embed plots, for example:
+
+## Critical questions
+
+
+In the following, I will present an overview of the responses to questions 1 and 2. The questions asked about the strength of agreement/disagreement with the following statements:
+
+* _Question 1_ It is the community norm in my field to share, with qualified researchers, datasets that support the results of peer-reviewed research articles. Include data sharing that occurs by any mechanism (e.g. emailing datasets upon request, posting datasets to lab websites, including datasets in journal supplementary information or data repositories).
+* _Question 2_ It is the community norm in my field to publicly archive all supporting datasets online, for use by anyone for any purpose, upon publication of a peer-reviewed research article.
+
+
+## Attitudes towards data sharing and archiving by journal type
+
+The following plots show the responses regarding the attitudes towards data sharing and archiving by whether or not the journal has adopted a JDAP-equivalent data archiving policy by now (May 2015).
+
+```{r, echo=FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+source("src/multiplot.R")
+
+x <- group_by(d, PolicyBinary, Response=Q4) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total)
+x <- x[order(x$Response, decreasing=T),]
+p1 <- ggplot(data=x) + aes(PolicyBinary, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data sharing is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Current policy")+ylab("Percentage")
+
+
+x <- group_by(d, PolicyBinary, Response=Q5) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total)
+x <- x[order(x$Response, decreasing=T),]
+p2 <- ggplot(data=x) + aes(PolicyBinary, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data archiving is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Current policy")+ylab("Percentage")
+
+p1
+
+p2
+
+```
+
+The same plots side by side. Clearly, data sharing is considered more of a community standard than data archiving.
+```{r, echo=FALSE, fig.width=10}
+
+multiplot(p1, p2, cols=2)
+```
+
+
+
+## Attitudes towards data sharing and archiving by journal type and journal JDAP adoption date
+
+
+The following plots show the responses regarding the attitudes towards data sharing and archiving for participants who (i) published in journals which have note adopted the JDAP so far ('No JDAP'), (ii) published in journals which had not _yet_ adopted the JDAP before publication ('Before JDAP'), and (iii) journals which had adopted the JDAP before publication ('After JDAP).
 
 ```{r, echo=FALSE}
-plot(cars)
+x <- group_by(d, PolicyAdoptedAtPublication, Response=Q4) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total)
+x <- x[order(x$Response, decreasing=T),]
+p1 <- ggplot(data=x) + aes(PolicyAdoptedAtPublication, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data sharing is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Policy at the time of publication")+ylab("Percentage")
+
+
+x <- group_by(d, PolicyAdoptedAtPublication, Response=Q5) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total)
+x <- x[order(x$Response, decreasing=T),]
+p2 <- ggplot(data=x) + aes(PolicyAdoptedAtPublication, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data archiving is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Policy at the time of publication")+ylab("Percentage")
+
+p1
+
+p2
+
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+The same plots side by side. Clearly, data sharing is considered more of a community standard than data archiving.
+```{r, echo=FALSE, fig.width=10}
+
+multiplot(p1, p2, cols=2)
+```
+

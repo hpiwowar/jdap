@@ -1,3 +1,4 @@
+
 library(plyr)
 library(dplyr)
 library(tidyr)
@@ -32,6 +33,7 @@ assign_type_to_columns <- function(d, questions, mapping, levels, to_NA, type=or
 }
 
 
+# TODO: Change the file names. 'JDAP 2.csv' is not a very self-explanatory name.
 
 
 d <- read.csv("./JDAP 2.csv", header=T, fill=TRUE, fileEncoding="UTF-8", as.is=T)
@@ -66,7 +68,7 @@ sort(unique(d$journal))
 ### Recode responses to all questions using the agree-disagree scale
 questions_agree_disagree <- c('Q4','Q5','Q17',sprintf("Q18_%d",1:12),sprintf("Q19_%d",1:10), 'Q21', 'Q22')
 mapping_agree_disagree <- c("Strongly disagree"="Strongly Disagree","Somewhat disagree"="Somewhat Disagree","Somewhat agree"="Somewhat Agree","Strongly agree"="Strongly Agree")
-levels_agree_disagree <- c("Strongly Disagree","Disagree","Somewhat Disagree","Neutral","Somewhat Agree","Agree","Strongly Agree")
+levels_agree_disagree <- rev(c("Strongly Disagree","Disagree","Somewhat Disagree","Neutral","Somewhat Agree","Agree","Strongly Agree"))
 d <- assign_type_to_columns(d, questions_agree_disagree, mapping_agree_disagree, levels_agree_disagree, c("","."))  # TODO: What's with the dots in responses to questions 18-19
   
 
@@ -130,23 +132,24 @@ cur_d[several_values,] <- ""
 # collect all responses in one column
 d$Q11_3 <- unique_nonempty(cur_d)
 
+# 
+# ### Recode responses to question 12
+# cur_d <- d[,paste0("Q12_",1:6)]
+# d <- select(d, -starts_with("Q12_"))
+# # overwrite 'other' if another value was specified as well
+# several_values <- num_nonempty(cur_d) > 1
+# cur_d[several_values, 'Q12_6'] <- ""
+# # treat all other conflicting responses as missing
+# several_values <- num_nonempty(cur_d) > 1
+# # TODO: Figure out what to do with these
+# cur_d[several_values,]
+# cur_d[several_values,] <- ""
+# d$Q12 <- unique_nonempty(cur_d)
 
+save(d, file="./JDAP 2_clean.rda")
 write.csv(d, file="./JDAP 2_clean.csv")
 
 
-
-### Recode responses to question 12
-cur_d <- d[,paste0("Q12_",1:6)]
-d <- select(d, -starts_with("Q12_"))
-# overwrite 'other' if another value was specified as well
-several_values <- num_nonempty(cur_d) > 1
-cur_d[several_values, 'Q12_6'] <- ""
-# treat all other conflicting responses as missing
-several_values <- num_nonempty(cur_d) > 1
-# TODO: Figure out what to do with these
-cur_d[several_values,]
-cur_d[several_values,] <- ""
-d$Q12 <- unique_nonempty(cur_d)
 
 
 
