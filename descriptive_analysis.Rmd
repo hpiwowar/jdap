@@ -1,0 +1,58 @@
+---
+title: "Untitled"
+output: html_document
+---
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+
+library(parsedate)
+library(dplyr)
+library(zoo)
+
+(load("./JDAP 2_clean.rda"))
+library(ggplot2)
+
+d$PublicationDate <- parse_date(with(d, paste(month, year))) %>% as.yearqtr %>% as.character # as.yearqtr # as.yearmon
+d$StartDate <- parse_date(d$StartDate) %>% as.yearqtr %>% as.character
+
+
+x <- group_by(d, StartDate, Q=Q5) %>% dplyr::summarize(N.resp=length(StartDate)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total)
+x$date <- parse_date(x$StartDate)
+x <- x[order(x$date),]
+
+View(x)
+x$StartDate
+subset(x, N.total > 1000)
+
+ggplot(data=x) + aes(StartDate, P.resp, fill=Q)+geom_bar(stat="identity") #, order=Response, , fill=Q4
+
+
+
+ggplot(d, aes(StartDate, Q4))+geom_bar(stat="identity")
+
+qplot(Q4, data=d, geom="bar", fill=Q4)+facet_wrap(~StartDate)
+
+
+library(HH)
+
+head(d)
+
+?likert
+
+
+likert(t(apply(data, 2, table)))
+
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
