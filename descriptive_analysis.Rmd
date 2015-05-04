@@ -149,8 +149,6 @@ suppressMessages( ci4 <- confint(m4) )
 table4 <- exp(cbind(OR = coef(m4), ci4)) %>% cbind(., t=coef(summary(m4))[1:nrow(.),'t value'])
 #table4 <- cbind(lOR = coef(m4), ci4) %>% cbind(., t=coef(summary(m4))[1:nrow(.),'t value'])
 
-#anova(m4, m4.justchange, m4.nochange)
-
 m5 <- polr(respQ5 ~ 1  + cAfterPolicyChange + cNonJDAPJournal + cDate, data=d, Hess=TRUE)
 m5.justchange <- polr(Q5 ~ 1 + cAfterPolicyChange , data=d, Hess=TRUE)
 m5.nochange <- polr(Q5 ~ 1 + cNonJDAPJournal + cDate, data=d, Hess=TRUE)
@@ -158,7 +156,13 @@ m5.nochange <- polr(Q5 ~ 1 + cNonJDAPJournal + cDate, data=d, Hess=TRUE)
 suppressMessages( ci5 <- confint(m5) )
 table5 <- exp(cbind(OR = coef(m5), ci5)) %>% cbind(., t=coef(summary(m5))[1:nrow(.),'t value'])
 
-#anova(m5, m5.justchange, m5.nochange)
+aov.m4.justchange <- anova(m4, m4.justchange)
+aov.m4.nochange <- anova(m4, m4.nochange)
+aov.m5.justchange <- anova(m5, m5.justchange)
+aov.m5.nochange <- anova(m5, m5.nochange)
+
+# aov.m5.nochange
+
 ```
 
 
@@ -166,13 +170,23 @@ The potential effect of JDAP adoption on authors' attitudes is might be confound
 
 In order to test for an effect of policy change on attitudes while controlling for potential confounding effects, we used an ordinal logistic regression model with three predictors: (i) journal type _(cNonJDAPJournal)_, (ii) (centered) publication date in years _(cDate)_, and (iii) a variable indicating whether the article was published after the the journal adopted a data archiving policy _(cAfterPolicyChange)_.
 
-The following table shows the estimated coefficients and 95\%-confidence intervals (transformed to odds ratios) for responses to *question 1*. Effects are statistically significant at the $\alpha=0.05$ level when the transformed confidence intervals do not contain $1$. Confidence intervals were obtained by profile likelihood. According to the model estimates, the introduction of the JDAP data archiving policy increases the odds of a positive response regarding *data sharing* by factor $1.36$ (CI=$[1.16; 1.60]$), while the remaining two predictors do not show any statistically significant effects.
+The following table shows the estimated coefficients and 95\%-confidence intervals (transformed to odds ratios) for responses to *question 1*. Effects are statistically significant at the $\alpha=0.05$ level when the transformed confidence intervals do not contain $1$. Confidence intervals were obtained by profile likelihood. According to the model estimates, the introduction of the JDAP data archiving policy significantly increases the odds of a positive response regarding *data sharing* by a factor of $1.36$ (CI=$[1.16; 1.60]$), while the remaining two predictors do not show any statistically significant effects.
+
+```{r, message=FALSE, eval=TRUE, echo=FALSE}
+options(digits=2)
+```
+
+We conducted two likelihood-ratio tests to assess the effect of change in policy and the other predictors on reported attitudes. The first likelihood-ratio test, comparing the full three-predictor model with a reduced model without the effect of policy change revealed a significantly better fit for the full model ($\chi^2(`r aov.m4.nochange[["   Df"]][2]`)=`r aov.m4.nochange[["LR stat."]][2]`$, $p<0.001$). A second likelihood-ratio test comparing the full model with a reduced model using only the policy change predictor (_cAfterPolicyChange_) revealed no statistically significantly difference ($\chi^2(`r aov.m4.justchange[["   Df"]][2]`)=`r aov.m4.justchange[["LR stat."]][2]`$, $p=`r aov.m4.justchange[["Pr(Chi)"]][2]`$).
+
+
 ```{r, message=FALSE, eval=TRUE, echo=FALSE}
 options(digits=2)
 table4
 ```
 
-The following table shows the estimated coefficients and 95\%-confidence intervals (transformed to odds ratios) for responses to *question 2*. According to the model estimates, the introduction of the JDAP data archiving policy increases the odds of a positive response regarding *data archiving* by factor $1.57$ (CI=$[1.33; 1.90]$), while the remaining two predictors do not show any statistically significant effects.
+The following table shows the estimated coefficients and 95\%-confidence intervals (transformed to odds ratios) for responses to *question 2*. According to the model estimates, the introduction of the JDAP data archiving policy significantly increases the odds of a positive response regarding *data archiving* by a factor of $1.57$ (CI=$[1.33; 1.90]$), while the remaining two predictors do not show any statistically significant effects.
+
+Here too, we conducted two likelihood-ratio tests to assess the effect of change in policy and the other predictors on reported attitudes. The first likelihood-ratio test, comparing the full three-predictor model with a reduced model without the effect of policy change revealed a significantly better fit for the full model ($\chi^2(`r aov.m5.nochange[["   Df"]][2]`)=`r aov.m5.nochange[["LR stat."]][2]`$, $p<0.001$). A second likelihood-ratio test comparing the full model with a reduced model using only the policy change predictor (_cAfterPolicyChange_) revealed no statistically significantly difference ($\chi^2(`r aov.m5.justchange[["   Df"]][2]`)=`r aov.m5.justchange[["LR stat."]][2]`$, $p=`r aov.m5.justchange[["Pr(Chi)"]][2]`$).
 
 ```{r, message=FALSE, eval=TRUE, echo=FALSE}
 options(digits=2)
