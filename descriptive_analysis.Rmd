@@ -72,12 +72,12 @@ library(dplyr)
 library(ggplot2)
 source("src/multiplot.R")
 
-x <- group_by(d, PolicyBinary, Response=Q4) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total)
+x <- group_by(d, PolicyBinary, Response=Q4) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total, Policy=sprintf("%s\n(N=%d)", PolicyBinary, N.total))
 x <- x[order(x$Response, decreasing=T),]
-p1 <- ggplot(data=x) + aes(PolicyBinary, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data sharing is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Current policy")+ylab("Percentage")
+p1 <- ggplot(data=x) + aes(Policy, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data sharing is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Current policy")+ylab("Percentage")
 
 
-x <- group_by(d, PolicyBinary, Response=Q5) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total)
+x <- group_by(d, PolicyBinary, Response=Q5) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total, Policy=sprintf("%s\n(N=%d)", PolicyBinary, N.total))
 x <- x[order(x$Response, decreasing=T),]
 p2 <- ggplot(data=x) + aes(PolicyBinary, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data archiving is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Current policy")+ylab("Percentage")
 
@@ -101,14 +101,14 @@ multiplot(p1, p2, cols=2)
 The following plots show the responses regarding the attitudes towards data sharing and archiving for participants who (i) published in journals which have note adopted the JDAP so far ('No JDAP'), (ii) published in journals which had not _yet_ adopted the JDAP before publication ('Before JDAP'), and (iii) journals which had adopted the JDAP before publication ('After JDAP).
 
 ```{r, echo=FALSE}
-x <- group_by(d, PolicyAdoptedAtPublication, Response=Q4) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total)
+x <- group_by(d, PolicyAdoptedAtPublication, Response=Q4) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total, Policy=sprintf("%s\n(N=%d)", PolicyAdoptedAtPublication, N.total))
 x <- x[order(x$Response, decreasing=T),]
-p1 <- ggplot(data=x) + aes(PolicyAdoptedAtPublication, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data sharing is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Policy at the time of publication")+ylab("Percentage")
+p1 <- ggplot(data=x) + aes(Policy, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data sharing is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Policy at the time of publication")+ylab("Percentage")
 
 
-x <- group_by(d, PolicyAdoptedAtPublication, Response=Q5) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total)
+x <- group_by(d, PolicyAdoptedAtPublication, Response=Q5) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total, Policy=sprintf("%s\n(N=%d)", PolicyAdoptedAtPublication, N.total))
 x <- x[order(x$Response, decreasing=T),]
-p2 <- ggplot(data=x) + aes(PolicyAdoptedAtPublication, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data archiving is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Policy at the time of publication")+ylab("Percentage")
+p2 <- ggplot(data=x) + aes(Policy, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data archiving is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Policy at the time of publication")+ylab("Percentage")
 
 p1
 
@@ -116,10 +116,26 @@ p2
 
 ```
 
-
 The same plots side by side. Clearly, data sharing is considered more of a community standard than data archiving.
 ```{r, echo=FALSE, fig.width=10}
 
 multiplot(p1, p2, cols=2)
 ```
 
+
+```{r, message=FALSE, eval=FALSE}
+
+library(MASS)
+
+
+d$cPolicy <- ifelse(d$PolicyAdoptedAtPublication=="After JDAP", .5, -.5)
+d$cDate <- as.yearmon(d$PublicationDate) %>% as.double %>% scale(., scale=F)
+
+summary(d$cDate)
+
+m <- polr(Q4 ~ 1 + cPolicy + cDate, data=d, Hess=TRUE)
+
+summary(m)
+
+multiplot(p1, p2, cols=2)
+```
