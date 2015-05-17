@@ -1,23 +1,24 @@
 ---
 title: "Data Archiving Attitudes"
-author: Heather Piwowar, Pavel Logacev, Todd J. Vision
+author: "Heather Piwowar, Pavel Logacev, Todd J. Vision"
 date: "May 17, 2015"
 output:
   html_document:
+    css: style.css
     fig_caption: yes
-    number_sections: yes
-    toc: yes
     keep_md: yes
-  word_document:
-    fig_caption: yes
-  pdf_document:
-    fig_caption: yes
     number_sections: yes
     toc: yes
   md_document:
     variant: markdown_github
-<!-- csl: apa.csl -->
+  pdf_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+  word_document:
+    fig_caption: yes
 bibliography: bibliography.bib
+<!-- csl: apa.csl -->
 ---
 
 
@@ -26,7 +27,21 @@ suppressPackageStartupMessages({
   require(dplyr)
   require(knitr)
   require(RColorBrewer)
+  require(knitr)
+  #require(kfigr)
+  opts_chunk$set(message=FALSE, warning=FALSE)
 })
+#knit_hooks$set(plot = function(x, options) {
+#   paste('<figure><img src="',
+#         opts_knit$get('base.url'), paste(x, collapse = '.'),
+#         '"><figcaption>', options$fig.cap, '</figcaption></figure>',
+#         sep = '')
+#})
+
+#knit_hooks$set(plot = function(x, options) {
+#   paste0('<figure><img src="',opts_knit$get('base.url'), paste(x, collapse = '.'),'">',
+#          '<figcaption>', options$fig.cap, '</figcaption></figure>')
+#})
 ```
 
 This is the abstract for now.
@@ -80,11 +95,17 @@ d$PolicyBinary <- ifelse(d$policy=="Required", "JDAP", "No JDAP")
 
 The survey was carried out using [Survey Monkey](www.surveymonkey.com). Invitations to participate were sent out to $n$ <!-- TODO: how many? -->
 authors by email every month. The average non-response rate was $p$. <!-- TODO: response/non-response rates -->
+Figure 1 shows the numbers of invitations and responses by the date of the author's last publication.
+
+Participants filled in a questionnaire consisting of 15 questions, most of which were multiple-choice.
+
+In the following, I will present an overview of the responses to questions 1 and 2. The questions asked about the strength of agreement/disagreement with the following statements:
+
+* _Question 1_ It is the community norm in my field to share, with qualified researchers, datasets that support the results of peer-reviewed research articles. Include data sharing that occurs by any mechanism (e.g. emailing datasets upon request, posting datasets to lab websites, including datasets in journal supplementary information or data repositories).
+* _Question 2_ It is the community norm in my field to publicly archive all supporting datasets online, for use by anyone for any purpose, upon publication of a peer-reviewed research article.
 
 
-
-
-```{r, message=FALSE,  echo=FALSE, fig.width=5, fig.height=3, fig.cap="Number of invitations and responses by quarter."}
+```{r responseRates, cache=FALSE, message=FALSE,  echo=FALSE, fig.width=5, fig.height=3, anchor="figure", fig.cap="Number of invitations and responses by quarter."}
 library(ggplot2)
 library(dplyr)
 
@@ -92,7 +113,7 @@ library(dplyr)
 #   n_by_date <- group_by(d, Date=ResponseDate_YQ) %>% dplyr::summarize(N=length(Date), type="Responses")
 #   n_by_date <- n_by_date %>% mutate(type="Invitations", N=Inf) %>% rbind(n_by_date, .)
 #   # TODO: Add invitation data for number of invitations, if necessary.
-# 
+#  
 #   p_by_date <- n_by_date %>%  ggplot(aes(Date, N, color=type, group=type))+geom_point()+geom_line()+theme_bw()+theme(axis.text.x=element_text(angle=90,hjust=1))+ylab("Number of invitations and responses")+xlab("Quarter") #+ ggtitle("Number of invitations and responses by quarter.")
 #   p_by_date
 #
@@ -111,17 +132,6 @@ library(dplyr)
 #   source("src/multiplot.R")
 #   multiplot(p_by_date, p_by_publication_date, cols=2)
 ```
-
-
-
-
-## Critical questions
-
-
-In the following, I will present an overview of the responses to questions 1 and 2. The questions asked about the strength of agreement/disagreement with the following statements:
-
-* _Question 1_ It is the community norm in my field to share, with qualified researchers, datasets that support the results of peer-reviewed research articles. Include data sharing that occurs by any mechanism (e.g. emailing datasets upon request, posting datasets to lab websites, including datasets in journal supplementary information or data repositories).
-* _Question 2_ It is the community norm in my field to publicly archive all supporting datasets online, for use by anyone for any purpose, upon publication of a peer-reviewed research article.
 
 
 ## Attitudes towards data sharing and archiving by journal type

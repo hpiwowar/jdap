@@ -18,18 +18,10 @@ Some researchers are sceptical regarding data archiving. We conducted a survey i
 
 
 The survey was carried out using [Survey Monkey](www.surveymonkey.com). Invitations to participate were sent out to $n$ <!-- TODO: how many? -->
-authors by email every month. The average non-response rate was $p$. 
+authors by email every month. The average non-response rate was $p$. <!-- TODO: response/non-response rates -->
+Figure 1 shows the numbers of invitations and responses by the date of the author's last publication.
 
-
-
-
-![Number of invitations and responses by quarter.](analysis_files/figure-html/unnamed-chunk-2-1.png) 
-
-
-
-
-## Critical questions
-
+Participants filled in a questionnaire consisting of 15 questions, most of which were multiple-choice.
 
 In the following, I will present an overview of the responses to questions 1 and 2. The questions asked about the strength of agreement/disagreement with the following statements:
 
@@ -37,14 +29,17 @@ In the following, I will present an overview of the responses to questions 1 and
 * _Question 2_ It is the community norm in my field to publicly archive all supporting datasets online, for use by anyone for any purpose, upon publication of a peer-reviewed research article.
 
 
+![Number of invitations and responses by quarter.](analysis_files/figure-html/responseRates-1.png) 
+
+
 ## Attitudes towards data sharing and archiving by journal type
 
 The following plots show the responses regarding the attitudes towards data sharing and archiving by whether or not the journal has adopted a JDAP-equivalent data archiving policy by now (May 2015).
 
-![](analysis_files/figure-html/unnamed-chunk-3-1.png) ![](analysis_files/figure-html/unnamed-chunk-3-2.png) 
+![](analysis_files/figure-html/unnamed-chunk-2-1.png) ![](analysis_files/figure-html/unnamed-chunk-2-2.png) 
 
 The same plots side by side. Clearly, data sharing is considered more of a community standard than data archiving.
-![](analysis_files/figure-html/unnamed-chunk-4-1.png) 
+![](analysis_files/figure-html/unnamed-chunk-3-1.png) 
 
 
 
@@ -53,10 +48,10 @@ The same plots side by side. Clearly, data sharing is considered more of a commu
 
 The following plots show the responses regarding the attitudes towards data sharing and archiving for participants who (i) published in journals which have note adopted the JDAP so far ('No JDAP'), (ii) published in journals which had not _yet_ adopted the JDAP before publication ('Before JDAP'), and (iii) journals which had adopted the JDAP before publication ('After JDAP).
 
-![](analysis_files/figure-html/unnamed-chunk-5-1.png) ![](analysis_files/figure-html/unnamed-chunk-5-2.png) 
+![](analysis_files/figure-html/unnamed-chunk-4-1.png) ![](analysis_files/figure-html/unnamed-chunk-4-2.png) 
 
 The same plots side by side. Clearly, data sharing is considered more of a community standard than data archiving.
-![](analysis_files/figure-html/unnamed-chunk-6-1.png) 
+![](analysis_files/figure-html/unnamed-chunk-5-1.png) 
 
 
 ### Inferential statistics
