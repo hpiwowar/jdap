@@ -1,0 +1,256 @@
+---
+title: "Data Archiving Attitudes"
+author: Heather Piwowar, Pavel Logacev, Todd J. Vision
+date: "May 17, 2015"
+output:
+  html_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+    keep_md: yes
+  word_document:
+    fig_caption: yes
+  pdf_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+  md_document:
+    variant: markdown_github
+<!-- csl: apa.csl -->
+bibliography: bibliography.bib
+---
+
+
+```{r setup, echo=FALSE, include=TRUE}
+suppressPackageStartupMessages({
+  require(dplyr)
+  require(knitr)
+  require(RColorBrewer)
+})
+```
+
+This is the abstract for now.
+
+# Introduction
+Some researchers are sceptical regarding data archiving. We conducted a survey in order to find out how the adoption of data archiving policies by journals affects researcher's attitudes towards archiving and sharing data.
+
+# The Survey
+
+<!-- load and prepare data -->
+
+```{r, cache=TRUE, message=FALSE, echo=FALSE}
+
+library(parsedate)
+library(dplyr)
+library(zoo)
+library(ggplot2)
+library(assertthat)
+
+load("./data/JDAP_Survey_Data_Tidy.rda")
+load("./data/jdap_dates.rda")
+interactive_mode <- FALSE
+
+# add the journal info to the main dataset
+assert_that( all(d$journal %in% dates$journal) ) %>% invisible
+d <- left_join(d, dates, by="journal")
+
+# format publication and response dates
+d$PublicationDate <- parse_date(with(d, paste(month, year)))
+d$ResponseDate <- parse_date(d$StartDate) %>% as.yearmon %>% as.POSIXct
+
+d$ResponseDate_YM <- as.yearmon(d$ResponseDate) %>% as.character
+d$ResponseDate_YQ <- as.yearqtr(d$ResponseDate) %>% as.character
+d$ResponseDate_Y <- strftime(d$ResponseDate, "%Y") %>% as.character
+
+d$PublicationDate_YM <- as.yearmon(d$PublicationDate) %>% as.character
+d$PublicationDate_YQ <- as.yearqtr(d$PublicationDate) %>% as.character
+d$PublicationDate_Y  <- strftime(d$PublicationDate, "%Y") %>% as.character
+
+# determine time since JDAP introduction in the journal where the article was published
+d$DaysPolicyToPublication <- difftime(d$PublicationDate, parse_date(d$policy_start), units="days")
+d$DaysPolicyToResponse <- difftime(d$ResponseDate, parse_date(d$policy_start), units="days") 
+
+d$PolicyAdoptedAtPublication <- ifelse(d$DaysPolicyToPublication>0, "After JDAP", "Before JDAP")
+d$PolicyAdoptedAtResponse <- ifelse(d$DaysPolicyToResponse>0, "After JDAP", "Before JDAP")
+d$PolicyAdoptedAtPublication[is.na(d$PolicyAdoptedAtPublication)] <- "No JDAP"
+d$PolicyAdoptedAtResponse[is.na(d$PolicyAdoptedAtResponse)] <- "No JDAP"
+d$PolicyBinary <- ifelse(d$policy=="Required", "JDAP", "No JDAP")
+```
+
+
+The survey was carried out using [Survey Monkey](www.surveymonkey.com). Invitations to participate were sent out to $n$ <!-- TODO: how many? -->
+authors by email every month. The average non-response rate was $p$. <!-- TODO: response/non-response rates -->
+
+
+
+
+```{r, message=FALSE,  echo=FALSE, fig.width=5, fig.height=3, fig.cap="Number of invitations and responses by quarter."}
+library(ggplot2)
+library(dplyr)
+
+#   # number of responses by response date
+#   n_by_date <- group_by(d, Date=ResponseDate_YQ) %>% dplyr::summarize(N=length(Date), type="Responses")
+#   n_by_date <- n_by_date %>% mutate(type="Invitations", N=Inf) %>% rbind(n_by_date, .)
+#   # TODO: Add invitation data for number of invitations, if necessary.
+# 
+#   p_by_date <- n_by_date %>%  ggplot(aes(Date, N, color=type, group=type))+geom_point()+geom_line()+theme_bw()+theme(axis.text.x=element_text(angle=90,hjust=1))+ylab("Number of invitations and responses")+xlab("Quarter") #+ ggtitle("Number of invitations and responses by quarter.")
+#   p_by_date
+#
+# It seems to make more sense to focus on the publication date for plotting, until it is clear why there are hardly any responses from the second half of 2013.
+
+  n_by_publication_date <- group_by(d, Date=PublicationDate_YQ) %>% dplyr::summarize(N=length(Date), type="Responses")
+  n_by_publication_date <- n_by_publication_date %>% mutate(type="Invitations", N=Inf) %>% rbind(n_by_publication_date, .)
+  # TODO: Add invitation data for number of invitations, if necessary.
+
+  p_by_publication_date <- n_by_publication_date %>% ggplot(aes(Date, N, fill=type, alpha=type, group=type)) + 
+                ylab("Number of invitations and responses")+xlab("Date of Publication")+geom_bar(stat="identity") + # geom_point()+geom_line()
+                scale_fill_manual(values=c("blue", "blue"))+scale_alpha_manual(values=c(.5, 1)) + 
+                theme(axis.title.y=element_text(size=rel(0.8)), axis.title.x=element_text(size=rel(0.8)), axis.text.x=element_text(angle=90,hjust=1), legend.title=element_blank())
+  print(p_by_publication_date)
+
+#   source("src/multiplot.R")
+#   multiplot(p_by_date, p_by_publication_date, cols=2)
+```
+
+
+
+
+## Critical questions
+
+
+In the following, I will present an overview of the responses to questions 1 and 2. The questions asked about the strength of agreement/disagreement with the following statements:
+
+* _Question 1_ It is the community norm in my field to share, with qualified researchers, datasets that support the results of peer-reviewed research articles. Include data sharing that occurs by any mechanism (e.g. emailing datasets upon request, posting datasets to lab websites, including datasets in journal supplementary information or data repositories).
+* _Question 2_ It is the community norm in my field to publicly archive all supporting datasets online, for use by anyone for any purpose, upon publication of a peer-reviewed research article.
+
+
+## Attitudes towards data sharing and archiving by journal type
+
+The following plots show the responses regarding the attitudes towards data sharing and archiving by whether or not the journal has adopted a JDAP-equivalent data archiving policy by now (May 2015).
+
+```{r, echo=FALSE, message=FALSE}
+library(dplyr)
+library(ggplot2)
+source("src/multiplot.R")
+
+x <- group_by(d, PolicyBinary, Response=Q4) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total, Policy=sprintf("%s\n(N=%d)", PolicyBinary, N.total))
+x <- x[order(x$Response, decreasing=T),]
+p1 <- ggplot(data=x) + aes(Policy, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data sharing is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Current policy")+ylab("Percentage")
+
+
+x <- group_by(d, PolicyBinary, Response=Q5) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total, Policy=sprintf("%s\n(N=%d)", PolicyBinary, N.total))
+x <- x[order(x$Response, decreasing=T),]
+p2 <- ggplot(data=x) + aes(PolicyBinary, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data archiving is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Current policy")+ylab("Percentage")
+
+p1
+
+p2
+
+```
+
+The same plots side by side. Clearly, data sharing is considered more of a community standard than data archiving.
+```{r, echo=FALSE, fig.width=10}
+
+multiplot(p1, p2, cols=2)
+```
+
+
+
+## Attitudes towards data sharing and archiving by journal type and journal JDAP adoption date
+
+
+The following plots show the responses regarding the attitudes towards data sharing and archiving for participants who (i) published in journals which have note adopted the JDAP so far ('No JDAP'), (ii) published in journals which had not _yet_ adopted the JDAP before publication ('Before JDAP'), and (iii) journals which had adopted the JDAP before publication ('After JDAP).
+
+```{r, echo=FALSE}
+x <- group_by(d, PolicyAdoptedAtPublication, Response=Q4) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total, Policy=sprintf("%s\n(N=%d)", PolicyAdoptedAtPublication, N.total))
+x <- x[order(x$Response, decreasing=T),]
+p1 <- ggplot(data=x) + aes(Policy, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data sharing is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Policy at the time of publication")+ylab("Percentage")
+
+
+x <- group_by(d, PolicyAdoptedAtPublication, Response=Q5) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total, Policy=sprintf("%s\n(N=%d)", PolicyAdoptedAtPublication, N.total))
+x <- x[order(x$Response, decreasing=T),]
+p2 <- ggplot(data=x) + aes(Policy, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data archiving is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Policy at the time of publication")+ylab("Percentage")
+
+p1
+
+p2
+
+```
+
+The same plots side by side. Clearly, data sharing is considered more of a community standard than data archiving.
+```{r, echo=FALSE, fig.width=10}
+
+multiplot(p1, p2, cols=2)
+```
+
+
+### Inferential statistics
+
+
+```{r, message=FALSE, eval=TRUE, echo=FALSE}
+
+library(MASS)
+library(zoo)
+library(dplyr)
+library(knitr)
+
+d$cAfterPolicyChange <- ifelse(d$PolicyAdoptedAtPublication=="After JDAP", 1, 0)
+d$cNonJDAPJournal <- ifelse(d$PolicyAdoptedAtPublication=="No JDAP", 1, 0)
+d$cDate <- as.double(as.yearmon(d$PublicationDate)) %>% scale(., scale=F)
+
+d$respQ4 <- ordered(d$Q4, levels=rev(levels(d$Q4)))
+d$respQ5 <- ordered(d$Q5, levels=rev(levels(d$Q5)))
+
+
+m4 <- polr(respQ4 ~ 1 + cAfterPolicyChange + cNonJDAPJournal + cDate, data=d , Hess=TRUE)
+# summary(m4)
+m4.justchange <- polr(respQ4 ~ 1 + cAfterPolicyChange, data=d , Hess=TRUE)
+m4.nochange <- polr(respQ4 ~ 1 + cNonJDAPJournal + cDate, data=d , Hess=TRUE)
+suppressMessages( ci4 <- confint(m4) )
+table4 <- exp(cbind(OR = coef(m4), ci4)) %>% cbind(., t=coef(summary(m4))[1:nrow(.),'t value'])
+#table4 <- cbind(lOR = coef(m4), ci4) %>% cbind(., t=coef(summary(m4))[1:nrow(.),'t value'])
+
+m5 <- polr(respQ5 ~ 1  + cAfterPolicyChange + cNonJDAPJournal + cDate, data=d, Hess=TRUE)
+m5.justchange <- polr(Q5 ~ 1 + cAfterPolicyChange , data=d, Hess=TRUE)
+m5.nochange <- polr(Q5 ~ 1 + cNonJDAPJournal + cDate, data=d, Hess=TRUE)
+# summary(m5)
+suppressMessages( ci5 <- confint(m5) )
+table5 <- exp(cbind(OR = coef(m5), ci5)) %>% cbind(., t=coef(summary(m5))[1:nrow(.),'t value'])
+
+aov.m4.justchange <- anova(m4, m4.justchange)
+aov.m4.nochange <- anova(m4, m4.nochange)
+aov.m5.justchange <- anova(m5, m5.justchange)
+aov.m5.nochange <- anova(m5, m5.nochange)
+
+# aov.m5.nochange
+
+```
+
+
+The potential effect of JDAP adoption on authors' attitudes is might be confounded by two other factors. Firstly, groups of researchers publishing in journals which are not planning to adopt the JDAP (or at least have not done so yet) may inherently differ from groups publishing in journals which were open to adopting the JDAP. Secondly, attitudes regarding data archiving may improve over time. 
+
+In order to test for an effect of policy change on attitudes while controlling for potential confounding effects, we used an ordinal logistic regression model with three predictors: (i) journal type _(cNonJDAPJournal)_, (ii) (centered) publication date in years _(cDate)_, and (iii) a variable indicating whether the article was published after the the journal adopted a data archiving policy _(cAfterPolicyChange)_.
+
+The following table shows the estimated coefficients and 95\%-confidence intervals (transformed to odds ratios) for responses to *question 1*. Effects are statistically significant at the $\alpha=0.05$ level when the transformed confidence intervals do not contain $1$. Confidence intervals were obtained by profile likelihood. According to the model estimates, the introduction of the JDAP data archiving policy significantly increases the odds of a positive response regarding *data sharing* by a factor of $1.36$ (CI=$[1.16; 1.60]$), while the remaining two predictors do not show any statistically significant effects.
+
+```{r, message=FALSE, eval=TRUE, echo=FALSE}
+options(digits=2)
+```
+
+We conducted two likelihood-ratio tests to assess the effect of change in policy and the other predictors on reported attitudes. The first likelihood-ratio test, comparing the full three-predictor model with a reduced model _without_ the effect of policy change revealed a significantly better fit for the full model ($\chi^2(`r aov.m4.nochange[["   Df"]][2]`)=`r aov.m4.nochange[["LR stat."]][2]`$, $p<0.001$). A second likelihood-ratio test comparing the full model with a reduced model using _only_ the policy change predictor (_cAfterPolicyChange_) revealed no statistically significantly difference ($\chi^2(`r aov.m4.justchange[["   Df"]][2]`)=`r aov.m4.justchange[["LR stat."]][2]`$, $p=`r aov.m4.justchange[["Pr(Chi)"]][2]`$).
+
+
+```{r, message=FALSE, eval=TRUE, echo=FALSE}
+options(digits=2)
+table4
+```
+
+The following table shows the estimated coefficients and 95\%-confidence intervals (transformed to odds ratios) for responses to *question 2*. According to the model estimates, the introduction of the JDAP data archiving policy significantly increases the odds of a positive response regarding *data archiving* by a factor of $1.57$ (CI=$[1.33; 1.90]$), while the remaining two predictors do not show any statistically significant effects.
+
+Here too, we conducted two likelihood-ratio tests to assess the effect of change in policy and the other predictors on reported attitudes. The first likelihood-ratio test, comparing the full three-predictor model with a reduced model _without_ the effect of policy change revealed a significantly better fit for the full model ($\chi^2(`r aov.m5.nochange[["   Df"]][2]`)=`r aov.m5.nochange[["LR stat."]][2]`$, $p<0.001$). A second likelihood-ratio test comparing the full model with a reduced model using _only_ the policy change predictor (_cAfterPolicyChange_) revealed no statistically significantly difference ($\chi^2(`r aov.m5.justchange[["   Df"]][2]`)=`r aov.m5.justchange[["LR stat."]][2]`$, $p=`r aov.m5.justchange[["Pr(Chi)"]][2]`$).
+
+```{r, message=FALSE, eval=TRUE, echo=FALSE}
+options(digits=2)
+table5
+```
+
