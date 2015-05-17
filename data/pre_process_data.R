@@ -33,10 +33,7 @@ assign_type_to_columns <- function(d, questions, mapping, levels, to_NA, type=or
 }
 
 
-# TODO: Change the file names. 'JDAP 2.csv' is not a very self-explanatory name.
-
-
-d <- read.csv("./JDAP 2.csv", header=T, fill=TRUE, fileEncoding="UTF-8", as.is=T)
+d <- read.csv("./JDAP_Survey_Data.csv", header=T, fill=TRUE, fileEncoding="UTF-8", as.is=T)
 key <- d[1,]
 d <- d[-1,]
 colnames(d)[1:6] <- as.character(key[1:6])
@@ -146,8 +143,8 @@ d$Q11_3 <- unique_nonempty(cur_d)
 # cur_d[several_values,] <- ""
 # d$Q12 <- unique_nonempty(cur_d)
 
-save(d, file="./JDAP 2_clean.rda")
-write.csv(d, file="./JDAP 2_clean.csv")
+save(d, file="./JDAP_Survey_Data_Tidy.rda")
+write.csv(d, file="./JDAP_Survey_Data_Tidy.csv")
 
 
 
