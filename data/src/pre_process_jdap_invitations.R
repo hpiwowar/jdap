@@ -13,4 +13,5 @@ unique(d$note)
 d$note <- NULL
 
 write.table(d, file="../Invitations_Timing.csv")
-save(d, file="../Invitations_Timing.rda")
+invitation_timing <- d
+save(invitation_timing, file="../Invitations_Timing.rda")

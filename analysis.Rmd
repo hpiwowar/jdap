@@ -24,6 +24,7 @@ bibliography: bibliography.bib
 
 ```{r setup, echo=FALSE, include=TRUE}
 suppressPackageStartupMessages({
+  require(plyr)
   require(dplyr)
   require(knitr)
   require(RColorBrewer)
@@ -42,36 +43,41 @@ suppressPackageStartupMessages({
 #   paste0('<figure><img src="',opts_knit$get('base.url'), paste(x, collapse = '.'),'">',
 #          '<figcaption>', options$fig.cap, '</figcaption></figure>')
 #})
+
 ```
 
-This is the abstract for now.
+This is where the abstract goes.
 
 # Introduction
 Some researchers are sceptical regarding data archiving. We conducted a survey in order to find out how the adoption of data archiving policies by journals affects researcher's attitudes towards archiving and sharing data.
 
 # The Survey
 
+## Method
+
 <!-- load and prepare data -->
 
 ```{r, cache=TRUE, message=FALSE, echo=FALSE}
 
 library(parsedate)
+library(plyr)
 library(dplyr)
 library(zoo)
 library(ggplot2)
 library(assertthat)
 
-load("./data/JDAP_Survey_Data_Tidy.rda")
-load("./data/jdap_dates.rda")
+load("./data/JDAP_Survey_Data_Tidy.rda") # loads 'd'
+load("./data/Journal_JDAP_Adoption_Dates.rda") # loads 'dates'
+load("./data/Invitations_Timing.rda") # loads 'invitation_timing'
 interactive_mode <- FALSE
 
 # add the journal info to the main dataset
 assert_that( all(d$journal %in% dates$journal) ) %>% invisible
-d <- left_join(d, dates, by="journal")
+d <- left_join(d, dates, by="Journal")
 
-# format publication and response dates
-d$PublicationDate <- parse_date(with(d, paste(month, year)))
-d$ResponseDate <- parse_date(d$StartDate) %>% as.yearmon %>% as.POSIXct
+# # format publication and response dates
+d$PublicationDate <- parse_date(d$PublicationDate) %>% as.yearmon
+d$ResponseDate <- parse_date(d$ResponseDate) %>% as.yearmon
 
 d$ResponseDate_YM <- as.yearmon(d$ResponseDate) %>% as.character
 d$ResponseDate_YQ <- as.yearqtr(d$ResponseDate) %>% as.character
@@ -89,15 +95,49 @@ d$PolicyAdoptedAtPublication <- ifelse(d$DaysPolicyToPublication>0, "After JDAP"
 d$PolicyAdoptedAtResponse <- ifelse(d$DaysPolicyToResponse>0, "After JDAP", "Before JDAP")
 d$PolicyAdoptedAtPublication[is.na(d$PolicyAdoptedAtPublication)] <- "No JDAP"
 d$PolicyAdoptedAtResponse[is.na(d$PolicyAdoptedAtResponse)] <- "No JDAP"
-d$PolicyBinary <- ifelse(d$policy=="Required", "JDAP", "No JDAP")
+# d$PolicyBinary <- ifelse(d$policy=="Required", "JDAP", "No JDAP")
+
+# NOTE: two invitations have NA for a publication date
+# subset(invitation_timing, is.na(publication_date))
+
+invitation_timing <- subset(invitation_timing, !is.na(publication_date))
+invitation_timing$PublicationDate_YQ <- as.character(invitation_timing$publication_date) %>% parse_date %>% as.yearqtr
+n_invitations_by_publication <- ddply(invitation_timing, .(Date=PublicationDate_YQ), summarize, N=length(PublicationDate_YQ))
+n_invitations_by_sent_month <- ddply(invitation_timing, .(Date=as.yearmon(sent_date)), summarize, N=length(PublicationDate_YQ))
+
+d$label_PolicyAdoptedAtPublication <- gsub(" ", "\n", d$PolicyAdoptedAtPublication)
+
 ```
 
-
-The survey was carried out using [Survey Monkey](www.surveymonkey.com). Invitations to participate were sent out to $n$ <!-- TODO: how many? -->
-authors by email every month. The average non-response rate was $p$. <!-- TODO: response/non-response rates -->
+The survey was carried out using [Survey Monkey](www.surveymonkey.com). Invitations to participate were sent out monthly between February 2011 and March 2014 to a selection of between $`r min(n_invitations_by_sent_month$N)`$ and $`r max(n_invitations_by_sent_month$N)`$ (with an average of $`r round(mean(n_invitations_by_sent_month$N))`$) authors of recently published articles in a pre-selected sample of journals. 
+<!-- TODO: how were the journals selected -->
+The invitations were sent out to a total of $`r nrow(invitation_timing)`$ authors, and $`r nrow(d)`$ responded (corresponding to a non-response rate of $`r round(100*nrow(d)/nrow(invitation_timing))`$\%).
 Figure 1 shows the numbers of invitations and responses by the date of the author's last publication.
+Participants filled in a questionnaire consisting of 15 multiple-choice questions regarding their attitudes, concerns and experiences with data archiving and sharing.
 
-Participants filled in a questionnaire consisting of 15 questions, most of which were multiple-choice.
+```{r responseRates, cache=FALSE, message=FALSE, echo=FALSE, fig.width=5, fig.height=3, anchor="figure", fig.cap="Number of invitations and responses by quarter."}
+
+library(ggplot2)
+library(dplyr)
+library(zoo)
+library(parsedate)
+
+n_by_publication_date <- ddply(d, .(Date=as.character(PublicationDate_YQ)), function(x) c(N=nrow(x))) %>% cbind(., type="Responses")
+n_invitations_by_publication$Date <- as.character(n_invitations_by_publication$Date)
+n_by_publication_date <- n_by_publication_date %>% rbind( cbind(n_invitations_by_publication, type="Invitations"), .)
+
+p_by_publication_date <- n_by_publication_date %>% ggplot(aes(Date, N, fill=type, alpha=type, group=type)) + 
+              ylab("Number of invitations and responses")+xlab("Date of Publication")+geom_bar(stat="identity", position="dodge") +
+              scale_fill_manual(values=c("blue", "blue"))+scale_alpha_manual(values=c(.5, 1))+theme_bw() + 
+              theme(axis.title.y=element_text(size=rel(0.8)), axis.title.x=element_text(size=rel(0.8)), axis.text.x=element_text(angle=90,hjust=1), legend.title=element_blank())
+
+print(p_by_publication_date)
+```
+
+<!-- TODO: how were the responses spread out over journal types? when was the JDAP introduced when it was introduced, mean and SD? -->
+
+
+## Results
 
 In the following, I will present an overview of the responses to questions 1 and 2. The questions asked about the strength of agreement/disagreement with the following statements:
 
@@ -105,93 +145,27 @@ In the following, I will present an overview of the responses to questions 1 and
 * _Question 2_ It is the community norm in my field to publicly archive all supporting datasets online, for use by anyone for any purpose, upon publication of a peer-reviewed research article.
 
 
-```{r responseRates, cache=FALSE, message=FALSE,  echo=FALSE, fig.width=5, fig.height=3, anchor="figure", fig.cap="Number of invitations and responses by quarter."}
-library(ggplot2)
-library(dplyr)
-
-#   # number of responses by response date
-#   n_by_date <- group_by(d, Date=ResponseDate_YQ) %>% dplyr::summarize(N=length(Date), type="Responses")
-#   n_by_date <- n_by_date %>% mutate(type="Invitations", N=Inf) %>% rbind(n_by_date, .)
-#   # TODO: Add invitation data for number of invitations, if necessary.
-#  
-#   p_by_date <- n_by_date %>%  ggplot(aes(Date, N, color=type, group=type))+geom_point()+geom_line()+theme_bw()+theme(axis.text.x=element_text(angle=90,hjust=1))+ylab("Number of invitations and responses")+xlab("Quarter") #+ ggtitle("Number of invitations and responses by quarter.")
-#   p_by_date
-#
-# It seems to make more sense to focus on the publication date for plotting, until it is clear why there are hardly any responses from the second half of 2013.
-
-  n_by_publication_date <- group_by(d, Date=PublicationDate_YQ) %>% dplyr::summarize(N=length(Date), type="Responses")
-  n_by_publication_date <- n_by_publication_date %>% mutate(type="Invitations", N=Inf) %>% rbind(n_by_publication_date, .)
-  # TODO: Add invitation data for number of invitations, if necessary.
-
-  p_by_publication_date <- n_by_publication_date %>% ggplot(aes(Date, N, fill=type, alpha=type, group=type)) + 
-                ylab("Number of invitations and responses")+xlab("Date of Publication")+geom_bar(stat="identity") + # geom_point()+geom_line()
-                scale_fill_manual(values=c("blue", "blue"))+scale_alpha_manual(values=c(.5, 1)) + 
-                theme(axis.title.y=element_text(size=rel(0.8)), axis.title.x=element_text(size=rel(0.8)), axis.text.x=element_text(angle=90,hjust=1), legend.title=element_blank())
-  print(p_by_publication_date)
-
-#   source("src/multiplot.R")
-#   multiplot(p_by_date, p_by_publication_date, cols=2)
-```
-
-
-## Attitudes towards data sharing and archiving by journal type
-
-The following plots show the responses regarding the attitudes towards data sharing and archiving by whether or not the journal has adopted a JDAP-equivalent data archiving policy by now (May 2015).
-
-```{r, echo=FALSE, message=FALSE}
-library(dplyr)
-library(ggplot2)
-source("src/multiplot.R")
-
-x <- group_by(d, PolicyBinary, Response=Q4) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total, Policy=sprintf("%s\n(N=%d)", PolicyBinary, N.total))
-x <- x[order(x$Response, decreasing=T),]
-p1 <- ggplot(data=x) + aes(Policy, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data sharing is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Current policy")+ylab("Percentage")
-
-
-x <- group_by(d, PolicyBinary, Response=Q5) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total, Policy=sprintf("%s\n(N=%d)", PolicyBinary, N.total))
-x <- x[order(x$Response, decreasing=T),]
-p2 <- ggplot(data=x) + aes(PolicyBinary, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data archiving is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Current policy")+ylab("Percentage")
-
-p1
-
-p2
-
-```
-
-The same plots side by side. Clearly, data sharing is considered more of a community standard than data archiving.
-```{r, echo=FALSE, fig.width=10}
-
-multiplot(p1, p2, cols=2)
-```
-
-
-
-## Attitudes towards data sharing and archiving by journal type and journal JDAP adoption date
-
+---
 
 The following plots show the responses regarding the attitudes towards data sharing and archiving for participants who (i) published in journals which have note adopted the JDAP so far ('No JDAP'), (ii) published in journals which had not _yet_ adopted the JDAP before publication ('Before JDAP'), and (iii) journals which had adopted the JDAP before publication ('After JDAP).
 
-```{r, echo=FALSE}
-x <- group_by(d, PolicyAdoptedAtPublication, Response=Q4) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total, Policy=sprintf("%s\n(N=%d)", PolicyAdoptedAtPublication, N.total))
-x <- x[order(x$Response, decreasing=T),]
-p1 <- ggplot(data=x) + aes(Policy, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data sharing is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Policy at the time of publication")+ylab("Percentage")
+```{r, fig.width=10, fig.height=5, echo=FALSE}
 
+library(ggplot2)
+library(reshape2)
+source("./src/plotLikert.R")
 
-x <- group_by(d, PolicyAdoptedAtPublication, Response=Q5) %>% dplyr::summarize(N.resp=length(StartDate)) %>% filter(!is.na(Response)) %>% dplyr::mutate(N.total=sum(N.resp), P.resp=N.resp/N.total, Policy=sprintf("%s\n(N=%d)", PolicyAdoptedAtPublication, N.total))
-x <- x[order(x$Response, decreasing=T),]
-p2 <- ggplot(data=x) + aes(Policy, P.resp*100, fill=Response, alpha=Response)+geom_bar(stat="identity")+ggtitle("'Data archiving is a community norm.'")+scale_fill_manual(values=c(rep("blue",3),"grey",rep("red",3)))+scale_alpha_manual(values=c(1,.75,.5,1,.5,.75,1))+theme_bw()+xlab("Policy at the time of publication")+ylab("Percentage")
+responses <- c("Strongly Agree","Agree","Somewhat Agree","Somewhat Disagree","Disagree","Strongly Disagree") # response categories from top to bottom
 
-p1
+tmp <- melt(d, measure.vars=c('Q_1','Q_2','Q_9')) #,'Q_12','Q_13'))
+tmp$variable <- gsub("Q_", "Question ", tmp$variable)
 
-p2
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication', var_facet="variable", response_order=responses, above_mid="Somewhat Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy")
+  
+print(p)
 
 ```
 
-The same plots side by side. Clearly, data sharing is considered more of a community standard than data archiving.
-```{r, echo=FALSE, fig.width=10}
-
-multiplot(p1, p2, cols=2)
-```
 
 
 ### Inferential statistics
@@ -208,21 +182,21 @@ d$cAfterPolicyChange <- ifelse(d$PolicyAdoptedAtPublication=="After JDAP", 1, 0)
 d$cNonJDAPJournal <- ifelse(d$PolicyAdoptedAtPublication=="No JDAP", 1, 0)
 d$cDate <- as.double(as.yearmon(d$PublicationDate)) %>% scale(., scale=F)
 
-d$respQ4 <- ordered(d$Q4, levels=rev(levels(d$Q4)))
-d$respQ5 <- ordered(d$Q5, levels=rev(levels(d$Q5)))
+d$respQ1 <- ordered(d$Q_1, levels=rev(levels(d$Q_1)))
+d$respQ2 <- ordered(d$Q_2, levels=rev(levels(d$Q_2)))
 
 
-m4 <- polr(respQ4 ~ 1 + cAfterPolicyChange + cNonJDAPJournal + cDate, data=d , Hess=TRUE)
+m4 <- polr(respQ1 ~ 1 + cAfterPolicyChange + cNonJDAPJournal + cDate, data=d , Hess=TRUE)
 # summary(m4)
-m4.justchange <- polr(respQ4 ~ 1 + cAfterPolicyChange, data=d , Hess=TRUE)
-m4.nochange <- polr(respQ4 ~ 1 + cNonJDAPJournal + cDate, data=d , Hess=TRUE)
+m4.justchange <- polr(respQ1 ~ 1 + cAfterPolicyChange, data=d , Hess=TRUE)
+m4.nochange <- polr(respQ1 ~ 1 + cNonJDAPJournal + cDate, data=d , Hess=TRUE)
 suppressMessages( ci4 <- confint(m4) )
 table4 <- exp(cbind(OR = coef(m4), ci4)) %>% cbind(., t=coef(summary(m4))[1:nrow(.),'t value'])
 #table4 <- cbind(lOR = coef(m4), ci4) %>% cbind(., t=coef(summary(m4))[1:nrow(.),'t value'])
 
-m5 <- polr(respQ5 ~ 1  + cAfterPolicyChange + cNonJDAPJournal + cDate, data=d, Hess=TRUE)
-m5.justchange <- polr(Q5 ~ 1 + cAfterPolicyChange , data=d, Hess=TRUE)
-m5.nochange <- polr(Q5 ~ 1 + cNonJDAPJournal + cDate, data=d, Hess=TRUE)
+m5 <- polr(respQ2 ~ 1  + cAfterPolicyChange + cNonJDAPJournal + cDate, data=d, Hess=TRUE)
+m5.justchange <- polr(respQ2 ~ 1 + cAfterPolicyChange , data=d, Hess=TRUE)
+m5.nochange <- polr(respQ2 ~ 1 + cNonJDAPJournal + cDate, data=d, Hess=TRUE)
 # summary(m5)
 suppressMessages( ci5 <- confint(m5) )
 table5 <- exp(cbind(OR = coef(m5), ci5)) %>% cbind(., t=coef(summary(m5))[1:nrow(.),'t value'])
@@ -249,10 +223,9 @@ options(digits=2)
 
 We conducted two likelihood-ratio tests to assess the effect of change in policy and the other predictors on reported attitudes. The first likelihood-ratio test, comparing the full three-predictor model with a reduced model _without_ the effect of policy change revealed a significantly better fit for the full model ($\chi^2(`r aov.m4.nochange[["   Df"]][2]`)=`r aov.m4.nochange[["LR stat."]][2]`$, $p<0.001$). A second likelihood-ratio test comparing the full model with a reduced model using _only_ the policy change predictor (_cAfterPolicyChange_) revealed no statistically significantly difference ($\chi^2(`r aov.m4.justchange[["   Df"]][2]`)=`r aov.m4.justchange[["LR stat."]][2]`$, $p=`r aov.m4.justchange[["Pr(Chi)"]][2]`$).
 
-
+<!-- http://kbroman.org/knitr_knutshell/pages/figs_tables.html -->
 ```{r, message=FALSE, eval=TRUE, echo=FALSE}
-options(digits=2)
-table4
+kable(table4, digits=2)
 ```
 
 The following table shows the estimated coefficients and 95\%-confidence intervals (transformed to odds ratios) for responses to *question 2*. According to the model estimates, the introduction of the JDAP data archiving policy significantly increases the odds of a positive response regarding *data archiving* by a factor of $1.57$ (CI=$[1.33; 1.90]$), while the remaining two predictors do not show any statistically significant effects.
@@ -261,6 +234,270 @@ Here too, we conducted two likelihood-ratio tests to assess the effect of change
 
 ```{r, message=FALSE, eval=TRUE, echo=FALSE}
 options(digits=2)
-table5
+kable(table5, digits=2)
 ```
 
+
+# Appendix
+
+## Appendix A: Questionnaire Structure
+<!-- TODO: Add response options below. -->
+
+How strongly do you disagree/agree with the following statements? (Regarding the next two questions.)
+
+<!-- Field: Q4 -->
+1. It is the community norm in my field to share, with qualified researchers, datasets that support the results of peer-reviewed research articles. Include data sharing that occurs by any mechanism (e.g. emailing datasets upon request, posting datasets to lab websites, including datasets in journal supplementary information or data repositories). 
+
+<!-- Field: Q5 -->
+2. It is the community norm in my field to publicly archive all supporting datasets online, for use by anyone for any purpose, upon publication of a peer-reviewed research article.
+
+<!-- Field: Q7 -->
+3. Do any of your published research papers have publicly archived datasets?
+
+<!-- Field: Q9 -->
+4. To your knowledge, how often have you experienced the following situations as a result of sharing the datasets behind your published research with investigators outside your research groups? Include experiences from datasets shared outside your research groups through any mechanism, including public archiving, selected distribution, or shared individually upon request (for example, in response to an email request).
+  a.  I formed new collaborations <!-- Field: Q9_1 -->
+	b.  I formed new collaborations that led/are leading to publications <!-- Field: Q9_2 -->
+	c.  I formed new collaborations that led/are leading to grants <!-- Field: Q9_3 -->
+	d.  Others have used my datasets and formally cited me <!-- Field: Q9_4 -->
+	e.  Others have used my datasets but did not formally cite me <!-- Field: Q9_5 -->
+	f.  Others have found errors in my research through my datasets <!-- Field: Q9_7 -->
+	g.  Others misinterpreted my datasets or used them inappropriately <!-- Field: Q9_8 -->
+	h.  I have had ongoing research projects scooped by another scientist <!-- Field: Q9_9 -->
+	i.  I have had future research plans scooped by another scientist <!-- Field: Q9_10 -->
+	j.  The ability of a junior colleague in my group (graduate student, postdoctoral fellow, or junior faculty member) to publish subsequent research has been compromised <!-- Field: Q9_11 -->
+	k.  My ability to receive commercial benefit from my research has been diminished <!-- Field: Q9_12 -->
+	l.  I spent a lot of money preparing data for sharing <!-- Field: Q9_13 -->
+	m.  I spent a lot of time preparing data for sharing <!-- Field: Q9_14 -->
+	n.  I spent a lot of time answering questions from qualified researchers about my shared data <!-- Field: Q9_15 -->
+	o.  I spent a lot of time answering questions from unqualified researchers about my shared data <!-- Field: Q9_17 -->
+	p.  Other (please specify) <!-- Field: Q9_16 / Q9_16_TEXT -->
+
+<!-- Field: Q11-->
+5. To your knowledge, what are the policies of these stakeholders as they apply to online public archiving of the datasets associated with your (month) (year) publication in (journal)? Choose all that apply
+	a.  The journal  <!-- Field: Q11_1 -->
+	b.  Your funder(s)  <!-- Field: Q11_2 -->
+	c.  Your employer or institution  <!-- Field: Q11_3 -->
+  
+<!-- Field: Q12 -->
+6. Are all datasets associated with your (month) (year) publication in (journal) publicly available online?
+	a.  ALL datasets are publicly available online   <!-- Field: Q12_1 -->
+	b.  SOME but not all of the datasets are publicly available online   <!-- Field: Q12_2 -->
+	c.  NONE of the datasets are publicly available online   <!-- Field: Q12_3 -->
+	d.  I don't know   <!-- Field: Q12_4 -->
+	e.  We did not collect any data for that publication   <!-- Field: Q12_5 -->
+	f. Other (please specify)   <!-- Field: Q12_6/Q12_6_TEXT -->
+  
+<!-- Field: Q13 -->
+7. IF ALL or SOME datasets associated with this paper are publicly available, where are the datasets hosted?
+	a.  Journal supplementary information   <!-- Field: Q13_1 -->
+	b.  A repository for data or research output   <!-- Field: Q13_2 -->
+	c.  A personal or lab website   <!-- Field: Q13_3 -->
+	d.  The entire dataset is in the body of the paper   <!-- Field: Q13_4 -->
+	e.  Other (please specify)   <!-- Field: Q13_5/Q13_5_TEXT -->
+	f.  Not applicable   <!-- Field: Q13_6 -->
+  
+<!-- Field: Q14 -->
+8. If NONE or only SOME of the datasets are publicly available, which of the following reflect your experience for the dataset(s) not publicly available, for this paper? Choose all that apply.
+	a.  The dataset has been submitted to a repository and is currently under embargo  <!-- Field: Q14_1 -->
+	b.  We plan to publicly archive the dataset in the future  <!-- Field: Q14_2 -->
+	c.  We plan to share the dataset upon request  <!-- Field: Q14_3 -->
+	d.  We hadn't considered publicly archiving the dataset  <!-- Field: Q14_4 -->
+	e.  We considered publicly archiving data and decided not to  <!-- Field: Q14_5 -->
+	f.  We wanted to publicly archive the data but were not able to, due to resource limitations  <!-- Field: Q14_6 -->
+	g.  We wanted to publicly archive the data but were not able to, for other reasons  <!-- Field: Q14_7 -->
+	h.  Other (please specify)  <!-- Field: Q14_8/Q14_8_TEXT -->
+	i.  Not applicable  <!-- Field: Q14_9 -->
+	j.  We wanted to publicly archive the data but were not able to, due to licencing or funder restrictions  <!-- Field: Q14_10 -->
+  
+The questions below refer to the Joint Data Archiving Policy, an example policy statement adopted by ... <!-- TODO -->
+
+<!-- Field: Q17 -->
+9. How strongly do you disagree/agree with this statement? I would seek alternative journals if I learned that my target journal had adopted the Joint Data Archiving Policy (above).
+
+<!-- Field: Q18 -->
+10. Imagine you just found a great journal to target when submitting your next manuscript. You read the Instruction to Authors and discover the journal adheres to the Joint Data Archiving Policy (above). How strongly do you disagree/agree with the following statements? I am worried that ...
+	a.  others might do research I am currently working on  <!-- Field: Q18_1 -->
+	b.  others might do research I am planning to do  <!-- Field: Q18_2 -->
+	c.  others might find errors in my research  <!-- Field: Q18_3  -->
+	d.  others might misinterpret my dataset or use it inappropriately  <!-- Field: Q18_4 -->
+	e.  I/we might be bothered with a lot of questions by qualified people  <!-- Field: Q18_5 -->
+	f.  I/we might be bothered with a lot of questions by unqualified people  <!-- Field: Q18_6 -->
+	g.  I/we might not be able to find the data  <!-- Field: Q18_7 -->
+	h.  it might take me/us a lot of time to find the data  <!-- Field: Q18_8 -->
+	i.  it might take me/us a lot of time to format or document the data  <!-- Field: Q18_9 -->
+	j.  it might take me/us a lot of time to submit the data  <!-- Field:  Q18_10-->
+	k.  I might lose intellectual property or commercial opportunities  <!-- Field: Q18_11 -->
+	l.  Other worries (please specify)  <!-- Field: Q18_12/Q18_12_TEXT -->
+   
+<!-- Field: Q19 -->
+11. Same instructions as the previous question: Imagine you just found a great journal to target when submitting your next manuscript. You read the Instruction to Authors and discover the journal adheres to the Joint Data Archiving Policy (above). How strongly do you disagree/agree with the following statements? I am pleased because...
+	a.  others will build upon my work more easily  <!-- Field: Q19_1  -->
+	b.  I will get more citations  <!-- Field: Q19_2  -->
+	c.  I will form more collaborations  <!-- Field: Q19_3  -->
+	d.  the contribution will be valued by my promotion or tenure committee  <!-- Field: Q19_4  -->
+	c.  the contribution will be valued by my funders  <!-- Field: Q19_5  -->
+	d.  I will be able to reuse other work more easily  <!-- Field: Q19_6  -->
+	e.  I will be able to reuse other work more often  <!-- Field: Q19_7  -->
+	f.  my scientific area will progress more quickly  <!-- Field: Q19_8  -->
+	g.  my scientific area will develop better tools and/or training  <!-- Field: Q19_9  -->
+	h.  I think it is the right thing to do  <!-- Field: Q19_10  -->
+	i.  Other (please specify)  <!-- Field: Q19_11/Q19_11_TEXT  -->
+   
+<!-- Field: Q21 -->
+12. How strongly do you disagree/agree with the following statements? Using datasets collected by investigators outside my research group is important in my research.
+
+<!-- Field: Q22 -->
+13. Using datasets collected by investigators outside my research group is important in my teaching or other non-research projects.
+
+<!-- Field: Q23/Q23_TEXT -->
+14. Please choose the title that most closely matches yours:
+     
+<!-- Field: Q25 -->
+15. Do you have any comments on the topic, or suggestions for how to improve this questionnaire?
+
+<!-- Field: Q26 -->
+16. Thank you for completing this survey! If you would like to enter the drawing for a $20 Amazon gif... <!-- TODO -->
+
+
+## Appendix B: Overview of responses to all questions
+
+## Questions 1, 2, 9
+1. It is the community norm in my field to share, with qualified researchers, datasets that support the results of peer-reviewed research articles. Include data sharing that occurs by any mechanism (e.g. emailing datasets upon request, posting datasets to lab websites, including datasets in journal supplementary information or data repositories).
+2. It is the community norm in my field to publicly archive all supporting datasets online, for use by anyone for any purpose, upon publication of a peer-reviewed research article.
+
+```{r, fig.width=10, fig.height=5, echo=FALSE}
+
+library(ggplot2)
+library(reshape2)
+source("./src/plotLikert.R")
+
+responses_agree_disagree <- c("Strongly Agree","Agree","Somewhat Agree","Somewhat Disagree","Disagree","Strongly Disagree") # response categories from top to bottom
+
+tmp <- melt(d, measure.vars=c('Q_1','Q_2','Q_9'))
+tmp$variable <- gsub("Q_", "Question ", tmp$variable)
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication', var_facet="variable", response_order=responses_agree_disagree, above_mid="Somewhat Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy")
+  
+print(p)
+
+```
+
+## Questions 3
+3. Do any of your published research papers have publicly archived datasets?
+
+```{r, fig.width=10, fig.height=5, echo=FALSE}
+
+library(ggplot2)
+library(reshape2)
+source("./src/plotLikert.R")
+
+responses <- c("5+ papers","2-4 papers","1 paper","None") # response categories from top to bottom
+tmp <- melt(d, measure.vars=c('Q_3'))
+tmp$variable <- gsub("Q_", "Question ", tmp$variable)
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication', var_facet="variable", response_order=responses, above_mid="None", na.label="No response", xlab="% Responses", ylab="JDAP Policy")
+  
+print(p)
+
+```
+
+## Questions 4
+4. To your knowledge, how often have you experienced the following situations as a result of sharing the datasets behind your published research with investigators outside your research groups? Include experiences from datasets shared outside your research groups through any mechanism, including public archiving, selected distribution, or shared individually upon request (for example, in response to an email request).
+  a.  I formed new collaborations <!-- Field: Q9_1 -->
+        b.  I formed new collaborations that led/are leading to publications <!-- Field: Q9_2 -->
+        c.  I formed new collaborations that led/are leading to grants <!-- Field: Q9_3 -->
+        d.  Others have used my datasets and formally cited me <!-- Field: Q9_4 -->
+        e.  Others have used my datasets but did not formally cite me <!-- Field: Q9_5 -->
+        f.  Others have found errors in my research through my datasets <!-- Field: Q9_7 -->
+        g.  Others misinterpreted my datasets or used them inappropriately <!-- Field: Q9_8 -->
+        h.  I have had ongoing research projects scooped by another scientist <!-- Field: Q9_9 -->
+        i.  I have had future research plans scooped by another scientist <!-- Field: Q9_10 -->
+        j.  The ability of a junior colleague in my group (graduate student, postdoctoral fellow, or junior faculty member) to publish subsequent research has been compromised <!-- Field: Q9_11 -->
+        k.  My ability to receive commercial benefit from my research has been diminished <!-- Field: Q9_12 -->
+        l.  I spent a lot of money preparing data for sharing <!-- Field: Q9_13 -->
+        m.  I spent a lot of time preparing data for sharing <!-- Field: Q9_14 -->
+        n.  I spent a lot of time answering questions from qualified researchers about my shared data <!-- Field: Q9_15 -->
+        o.  Other (please specify) <!-- Field: Q9_16 / Q9_16_TEXT -->
+        p.  I spent a lot of time answering questions from unqualified researchers about my shared data <!-- Field: Q9_17 -->
+
+```{r, fig.width=10, fig.height=5, echo=FALSE}
+
+library(ggplot2)
+library(reshape2)
+source("./src/plotLikert.R")
+
+unique( d$Q_4_17 )
+unique(as.character(d$Q_4_3))
+1:15
+responses <- c( "Many times","A few times","Once","Never") # response categories from top to bottom
+
+tmp <- melt(d, measure.vars=paste0('Q_4_',c(1:15,17) ))
+tmp$variable <- gsub("Q_", "Question ", tmp$variable)
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication', var_facet="variable", response_order=responses, above_mid="Never", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
+  
+print(p)
+
+```
+
+
+## Questions 5
+5. To your knowledge, what are the policies of these stakeholders as they apply to online public archiving of the datasets associated with your (month) (year) publication in (journal)? Choose all that apply
+        a.  The journal  <!-- Field: Q11_1 -->
+        b.  Your funder(s)  <!-- Field: Q11_2 -->
+        c.  Your employer or institution  <!-- Field: Q11_3 -->
+
+```{r, fig.width=10, fig.height=5, echo=FALSE}
+
+library(ggplot2)
+library(reshape2)
+source("./src/plotLikert.R")
+
+responses <- c("Requires online public archiving","Recommends online public archiving","Forbids online public archiving")
+
+tmp <- melt(d, measure.vars=paste0('Q_5_',c(1:3) ))
+tmp$variable <- gsub("Q_", "Question ", tmp$variable)
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication', var_facet="variable", response_order=responses, above_mid="Recommends online public archiving", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
+  
+print(p)
+
+```
+
+<!-- TODO: Need to reformat data to analyze questions 6 (->Q12), 7 (->Q13),  -->
+
+
+## Questions 6
+6. Are all datasets associated with your (month) (year) publication in (journal) publicly available online?
+  a.  ALL datasets are publicly available online   <!-- Field: Q12_1 -->
+  b.  SOME but not all of the datasets are publicly available online   <!-- Field: Q12_2 -->
+  c.  NONE of the datasets are publicly available online   <!-- Field: Q12_3 -->
+	d.  I don't know   <!-- Field: Q12_4 -->
+	e.  We did not collect any data for that publication   <!-- Field: Q12_5 -->
+	f. Other (please specify)   <!-- Field: Q12_6/Q12_6_TEXT -->
+
+```{r, fig.width=10, fig.height=5, echo=FALSE}
+
+library(ggplot2)
+library(reshape2)
+
+d$Q_6_
+
+with(d, xtabs(~I(Q_6_1!="")+I(Q_6_2!="")+I(Q_6_3!="") ))
+
+unique( d$Q_8_2 )
+
+```
+
+## Questions 12, 13
+
+```{r, fig.width=7, fig.height=5, echo=FALSE}
+
+library(ggplot2)
+library(reshape2)
+source("./src/plotLikert.R")
+
+tmp <- melt(d, measure.vars=c('Q_12','Q_13'))
+tmp$variable <- gsub("Q_", "Question ", tmp$variable)
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication', var_facet="variable", response_order=responses_agree_disagree, above_mid="Somewhat Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy")
+  
+print(p)
+
+```

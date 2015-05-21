@@ -43,13 +43,13 @@ assert_that(unique(d$ResponseSet) ==  "Default Response Set")
 d$ResponseSet <- NULL
 key$ResponseSet <- NULL
 
-# temporarily (TODO) delete open questions
-d$Q9_16_TEXT <- NULL
-d$Q12_6_TEXT <- NULL
-d$Q13_5_TEXT <- NULL
-d$Q14_8_TEXT <- NULL
-d$Q18_12_TEXT <- NULL
-d$Q25 <- NULL
+# # temporarily (TODO) delete open questions
+# d$Q9_16_TEXT <- NULL
+# d$Q12_6_TEXT <- NULL
+# d$Q13_5_TEXT <- NULL
+# d$Q14_8_TEXT <- NULL
+# d$Q18_12_TEXT <- NULL
+# d$Q25 <- NULL
 
 # These records look strange. Besides the journal names and year (9999), all the answers that were given are the same. Furthermore, only questions with numberical answers
 # were answered.
@@ -102,6 +102,8 @@ several_values <- num_nonempty(cur_d) > 1
 cur_d[several_values,] <- ""
 # collect all responses in one column
 d$Q11_1 <- unique_nonempty(cur_d)
+# set all empty values to NAs
+d$Q11_1[d$Q11_1 == ""] <- NA
 
 ### Recode responses to question 11_2
 cur_d <- d[,paste0("Q11_2_",1:6)]
@@ -115,6 +117,8 @@ several_values <- num_nonempty(cur_d) > 1
 cur_d[several_values,] <- ""
 # collect all responses in one column
 d$Q11_2 <- unique_nonempty(cur_d)
+# set all empty values to NAs
+d$Q11_2[d$Q11_2 == ""] <- NA
 
 ### Recode responses to question 11_3
 cur_d <- d[,paste0("Q11_3_",1:6)]
@@ -128,6 +132,8 @@ several_values <- num_nonempty(cur_d) > 1
 cur_d[several_values,] <- ""
 # collect all responses in one column
 d$Q11_3 <- unique_nonempty(cur_d)
+# set all empty values to NAs
+d$Q11_3[d$Q11_3 == ""] <- NA
 
 # 
 # ### Recode responses to question 12
@@ -142,6 +148,20 @@ d$Q11_3 <- unique_nonempty(cur_d)
 # cur_d[several_values,]
 # cur_d[several_values,] <- ""
 # d$Q12 <- unique_nonempty(cur_d)
+
+library(parsedate)
+library(plyr)
+library(dplyr)
+library(zoo)
+
+# parse dates
+d$PublicationDate <- parse_date(with(d, paste(month, year))) %>% as.yearmon %>% as.character
+d$ResponseDate <- parse_date(d$StartDate) %>% as.yearmon %>% as.character
+
+d <- select(d, ResponseID, ResponseDate, PublicationDate, Journal=journal, Q_1=Q4, Q_2=Q5, Q_3=Q7, 
+            Q_4_=starts_with("Q9"), Q_5_=starts_with("Q11"), Q_6_=starts_with("Q12"), Q_7_=starts_with("Q13"),
+            Q_8_=starts_with("Q14"), Q_9=Q17, Q_10_=starts_with("Q18"), Q_11_=starts_with("Q19"),
+            Q_12=Q21, Q_13=Q22, Q_14_=starts_with("Q23"), Q_15=Q25, Q_16=Q26 )
 
 save(d, file="../JDAP_Survey_Data_Tidy.rda")
 write.csv(d, file="../JDAP_Survey_Data_Tidy.csv")

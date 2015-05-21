@@ -28,5 +28,7 @@ dates$policy_start <- ""
 dates$policy_start[!is.na(dates$policy_start_str)] <- parse_date(dates$policy_start_str[!is.na(dates$policy_start_str)]) %>% as.character
 dates$policy_start
 
+dates <- rename(dates, Journal=journal)
+
 write.table(dates, file="../Journal_JDAP_Adoption_Dates.csv")
 save(dates, file="../Journal_JDAP_Adoption_Dates.rda")

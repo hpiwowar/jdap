@@ -1,0 +1,13 @@
+body{
+counter-reset:table figure;
+}
+
+caption::before{
+counter-increment: table;
+content: "Table " counter(table) ": ";
+}
+
+.caption::before{
+counter-increment: figure;
+content: "Figure " counter(figure) ": ";
+}
