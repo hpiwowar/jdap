@@ -63,7 +63,7 @@ plot_likert <- function(d, response_order, above_mid, response, var_x, var_facet
              scale_alpha_manual(values=alpha_type,  breaks=names(alpha_type), labels=names(alpha_type)) 
     
     plot_breaks <- seq(-100,100,10)
-    plot_labels <- c(seq(100,0,-10), seq(10,100,10))
+    plot_labels <- c(seq(100,10,-10), 0, seq(10,100,10))
     p <- p + ggplot2::xlab(ylab) + ggplot2::ylab(xlab) + scale_y_continuous(breaks=plot_breaks, labels=plot_labels)
     
     facet_formula <- sprintf("%s ~ %s", ifelse(nrow(agg_neutral), "ResponseNeutrality", "."),

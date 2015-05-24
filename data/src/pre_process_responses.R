@@ -78,11 +78,11 @@ d <- assign_type_to_columns(d, questions_never_often, c(), levels_never_often, c
 
 ### Recode responses to question 7
 mapping_Q7 <- c("I'm not sure if any of my papers have publicly available datasets"="Not sure",
-                "I've never published a paper based on a dataset collected by me or my co-authors"="No papers with own data",
-                "No, none of my paper-related datasets are publicly available on the internet"="None",
-                "Yes, a dataset from <b>one paper</b> is publicly available on the internet"="1 paper",
-                "Yes, datasets from <b>2-4 papers</b> are publicly available on the internet"="2-4 papers",
-                "Yes, datasets from <b>5 or more papers</b> are publicly available on the internet"="5+ papers")
+                "I've never published a paper based on a dataset collected by me or my co-authors"="No papers based on own data",
+                "No, none of my paper-related datasets are publicly available on the internet"="No papers with archived data",
+                "Yes, a dataset from <b>one paper</b> is publicly available on the internet"="1 paper with archived data",
+                "Yes, datasets from <b>2-4 papers</b> are publicly available on the internet"="2-4 papers with archived data",
+                "Yes, datasets from <b>5 or more papers</b> are publicly available on the internet"="5+ papers with archived data")
 d <- assign_type_to_columns(d, 'Q7', mapping_Q7, mapping_Q7, c(""), factor)
 
 
@@ -162,6 +162,7 @@ d <- select(d, ResponseID, ResponseDate, PublicationDate, Journal=journal, Q_1=Q
             Q_4_=starts_with("Q9"), Q_5_=starts_with("Q11"), Q_6_=starts_with("Q12"), Q_7_=starts_with("Q13"),
             Q_8_=starts_with("Q14"), Q_9=Q17, Q_10_=starts_with("Q18"), Q_11_=starts_with("Q19"),
             Q_12=Q21, Q_13=Q22, Q_14_=starts_with("Q23"), Q_15=Q25, Q_16=Q26 )
+d <- rename(d, Q_4_15_TEXT=Q_4_16, Q_4_16=Q_4_17, Q_6_6_TEXT=Q_6_7, Q_7_5_TEXT=Q_7_6, Q_7_6=Q_7_7  )
 
 save(d, file="../JDAP_Survey_Data_Tidy.rda")
 write.csv(d, file="../JDAP_Survey_Data_Tidy.csv")
