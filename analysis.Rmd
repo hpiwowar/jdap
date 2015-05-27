@@ -70,6 +70,7 @@ load("./data/JDAP_Survey_Data_Tidy.rda") # loads 'd'
 load("./data/Journal_JDAP_Adoption_Dates.rda") # loads 'dates'
 load("./data/Invitations_Timing.rda") # loads 'invitation_timing'
 interactive_mode <- FALSE
+jdap_adoption_dates <- dates
 
 # add the journal info to the main dataset
 assert_that( all(d$journal %in% dates$journal) ) %>% invisible
@@ -248,12 +249,9 @@ How strongly do you disagree/agree with the following statements? (Regarding the
 <!-- Field: Q4 -->
 1. It is the community norm in my field to share, with qualified researchers, datasets that support the results of peer-reviewed research articles. Include data sharing that occurs by any mechanism (e.g. emailing datasets upon request, posting datasets to lab websites, including datasets in journal supplementary information or data repositories).
 
+<!--
 _(Strongly Agree - Agree - Somewhat Agree - Neutral - Somewhat Disagree - Disagree - Strongly Disagree)_
-
-<!-- Field: Q5 -->
-2. It is the community norm in my field to publicly archive all supporting datasets online, for use by anyone for any purpose, upon publication of a peer-reviewed research article.
-
-_(Strongly Agree - Agree - Somewhat Agree - Neutral - Somewhat Disagree - Disagree - Strongly Disagree)_
+-->
 
 ```{r, fig.width=7, fig.height=5, echo=FALSE}
 
@@ -263,7 +261,30 @@ source("./src/plotLikert.R")
 
 responses_agree_disagree <- c("Strongly Agree","Agree","Somewhat Agree","Somewhat Disagree","Disagree","Strongly Disagree") # response categories from top to bottom
 
-tmp <- melt(d, measure.vars=c('Q_1','Q_2'))
+tmp <- melt(d, measure.vars=c('Q_1'))
+tmp$variable <- gsub("Q_", "Question ", tmp$variable)
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication', var_facet="variable", response_order=responses_agree_disagree, above_mid="Somewhat Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy")
+  
+print(p)
+
+```
+
+<!-- Field: Q5 -->
+2. It is the community norm in my field to publicly archive all supporting datasets online, for use by anyone for any purpose, upon publication of a peer-reviewed research article.
+
+<!--
+_(Strongly Agree - Agree - Somewhat Agree - Neutral - Somewhat Disagree - Disagree - Strongly Disagree)_
+-->
+
+```{r, fig.width=7, fig.height=5, echo=FALSE}
+
+library(ggplot2)
+library(reshape2)
+source("./src/plotLikert.R")
+
+responses_agree_disagree <- c("Strongly Agree","Agree","Somewhat Agree","Somewhat Disagree","Disagree","Strongly Disagree") # response categories from top to bottom
+
+tmp <- melt(d, measure.vars=c('Q_2'))
 tmp$variable <- gsub("Q_", "Question ", tmp$variable)
 p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication', var_facet="variable", response_order=responses_agree_disagree, above_mid="Somewhat Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy")
   
@@ -273,14 +294,12 @@ print(p)
 
 <!-- Field: Q7 -->
 3. Do any of your published research papers have publicly archived datasets?
-
-  Response Options:
-  1. Yes, datasets from <b>5 or more papers</b> are publicly available on the internet
-  2. Yes, datasets from <b>2-4 papers</b> are publicly available on the internet
-  3. Yes, a dataset from <b>one paper</b> is publicly available on the internet  
-  4. No, none of my paper-related datasets are publicly available on the internet
-  5. I've never published a paper based on a dataset collected by me or my co-authors
-  6. I'm not sure if any of my papers have publicly available datasets
+  a. Yes, datasets from <b>5 or more papers</b> are publicly available on the internet
+  b. Yes, datasets from <b>2-4 papers</b> are publicly available on the internet
+  c. Yes, a dataset from <b>one paper</b> is publicly available on the internet  
+  d. No, none of my paper-related datasets are publicly available on the internet
+  e. I've never published a paper based on a dataset collected by me or my co-authors
+  f. I'm not sure if any of my papers have publicly available datasets
 
 
 ```{r, fig.width=7, fig.height=5, echo=FALSE}
@@ -317,12 +336,14 @@ print(p)
 	o.  Other (please specify) <!-- Field: Q9_16 - Q9_16_TEXT / Q_4_15 - Q_4_15_TEXT -->
   p.  I spent a lot of time answering questions from unqualified researchers about my shared data <!-- Field: Q9_17 / Q_4_16 -->
 
+<!--
   Response Options:
   1. Many times
   2. A few times
   3. Once
   4. Never
-  
+-->
+
 ```{r, fig.width=10, fig.height=5, echo=FALSE}
 
 library(ggplot2)
@@ -352,10 +373,13 @@ library(ggplot2)
 library(reshape2)
 source("./src/plotLikert.R")
 
+facet_labels <- c('Journal', 'Funder(s)', 'Employer or institution')
 responses <- c("Requires online public archiving","Recommends online public archiving","Forbids online public archiving")
 tmp <- melt(d, measure.vars=paste0('Q_5_', 1:3))
-tmp$variable <- letters[gsub("Q_", "", tmp$variable) %>% gsub("5_", "", .) %>% as.integer]
-p <- plot_likert(tmp, response='value', var_x='PolicyAdoptedAtPublication', var_facet="variable", response_order=responses, above_mid="Recommends online public archiving", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
+tmp$variable <- facet_labels[gsub("Q_", "", tmp$variable) %>% gsub("5_", "", .) %>% as.integer]
+tmp$variable <- factor(tmp$variable, levels=facet_labels)
+
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication', var_facet="variable", response_order=responses, above_mid="Recommends online public archiving", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
 #p <- p + theme(axis.text.x=element_text(angle=-90, size=8))
 
 print(p)
@@ -374,28 +398,27 @@ Response options:
 	f. Other (please specify)   <!-- Field: Q12_6/Q12_6_TEXT -->
 
 
-```{r, fig.width=10, fig.height=5, echo=FALSE}
-
+```{r, fig.width=10, fig.height=5, echo=FALSE, eval=FALSE}
+library(dplyr)
 library(ggplot2)
 library(reshape2)
 source("./src/plotLikert.R")
 
 id_vars <- c('ResponseID','PolicyAdoptedAtPublication','label_PolicyAdoptedAtPublication')
 cur_d <- d[,c(id_vars,paste0('Q_6_', 1:6))]
-cur_d <- melt(cur_d, id.vars=id_vars) %>% subset(value != "")
+cur_d <- melt(cur_d, id.vars=id_vars) %>% %>% subset(value != "")
 cur_d$variable <- NULL
 
-d$Q_6
 
 levels <- c("ALL datasets are publicly available online","SOME but not all of the datasets are publicly available online",
             "NONE of the datasets are publicly available online","We did not collect any data for that publication",
             "I don't know", "Other (please specify)")
 cur_d$value <- ordered(cur_d$value, levels=levels)
 
-x <- group_by(cur_d, value, PolicyAdoptedAtPublication, label_PolicyAdoptedAtPublication) %>% dplyr::summarize(N=length(value))
-p <- ggplot(x, aes(label_PolicyAdoptedAtPublication, N, group=value, fill=value))+geom_bar(stat="identity", position="dodge")+ylab("Number of Responses")+ylab("JDAP Policy")
+tmp <- group_by(cur_d, PolicyAdoptedAtPublication, label_PolicyAdoptedAtPublication, value) %>% dplyr::summarize(N=length(value))  %>% dplyr::mutate(N.total=sum(N), class.Proportion=N/N.total)
 
-p + theme_bw()
+p <- ggplot(tmp, aes(label_PolicyAdoptedAtPublication, class.Proportion*100, group=value, fill=value, alpha=value))+geom_bar(stat="identity", position="dodge")+xlab("JDAP Policy")+ylab("Proportion of responses (in %)")
+p + theme_bw() + scale_fill_manual(values=c(rep("blue",2), rep("red",2), "grey", "green" )) + scale_alpha_manual(values=c(1,.5, 1,.5, 1,1))
 
 ```
   
@@ -420,14 +443,13 @@ cur_d <- d[,c(id_vars,paste0('Q_7_', 1:6))]
 cur_d <- melt(cur_d, id.vars=id_vars) %>% subset(value != "")
 cur_d$variable <- NULL
 
-
 levels <- c("Journal supplementary information", "A repository for data or research output", "A personal or lab website",
-            "The entire dataset is in the body of the paper", "Not applicable", "Other (please specify)")
+            "Not applicable", "The entire dataset is in the body of the paper", "Other (please specify)")
 cur_d$value <- ordered(cur_d$value, levels=levels)
 
-x <- group_by(cur_d, value, PolicyAdoptedAtPublication, label_PolicyAdoptedAtPublication) %>% dplyr::summarize(N=length(value))
-p <- ggplot(x, aes(label_PolicyAdoptedAtPublication, N, group=value, fill=value))+geom_bar(stat="identity", position="dodge")+ylab("Number of Responses")+ylab("JDAP Policy")
+tmp <- group_by(cur_d, PolicyAdoptedAtPublication, label_PolicyAdoptedAtPublication, value) %>% dplyr::summarize(N=length(value))  %>% dplyr::mutate(N.total=sum(N), class.Proportion=N/N.total)
 
+p <- ggplot(tmp, aes(label_PolicyAdoptedAtPublication, class.Proportion*100, group=value, fill=value))+geom_bar(stat="identity", position="dodge")+xlab("JDAP Policy")+ylab("Proportion of responses (in %)")
 p + theme_bw()
 
 ```
@@ -445,11 +467,43 @@ p + theme_bw()
 	i.  Not applicable  <!-- Field: Q14_9 -->
 	j.  We wanted to publicly archive the data but were not able to, due to licencing or funder restrictions  <!-- Field: Q14_10 -->
   
+  
+```{r, fig.width=10, fig.height=5, echo=FALSE}
+
+library(ggplot2)
+library(reshape2)
+source("./src/plotLikert.R")
+
+id_vars <- c('ResponseID','PolicyAdoptedAtPublication','label_PolicyAdoptedAtPublication')
+cur_d <- d[,c(id_vars,paste0('Q_8_', 1:10))]
+cur_d <- melt(cur_d, id.vars=id_vars) %>% subset(value != "")
+cur_d$variable <- NULL
+
+levels <- c("The dataset has been submitted to a repository and is currently under embargo",
+            "We plan to publicly archive the dataset in the future",
+            "We plan to share the dataset upon request",
+            "We hadn't considered publicly archiving the dataset",
+            "We considered publicly archiving data and decided not to",
+            "We wanted to publicly archive the data but were not able to, due to resource limitations",
+            "We wanted to publicly archive the data but were not able to, for other reasons",           
+            "We wanted to publicly archive the data but were not able to, due to licencing or funder restrictions",
+            "Not applicable", "Other (please specify)")
+cur_d$value <- ordered(cur_d$value, levels=levels)
+
+
+tmp <- group_by(cur_d, PolicyAdoptedAtPublication, label_PolicyAdoptedAtPublication, value) %>% dplyr::summarize(N=length(value))  %>% dplyr::mutate(N.total=sum(N), class.Proportion=N/N.total)
+
+p <- ggplot(tmp, aes(label_PolicyAdoptedAtPublication, class.Proportion*100, group=value, fill=value))+geom_bar(stat="identity", position="dodge")+xlab("JDAP Policy")+ylab("Proportion of responses (in %)")
+p + theme_bw()
+
+```
+  
 The questions below refer to the Joint Data Archiving Policy, an example policy statement adopted by ... <!-- TODO -->
 
 <!-- Field: Q17 -->
 9. How strongly do you disagree/agree with this statement? I would seek alternative journals if I learned that my target journal had adopted the Joint Data Archiving Policy (above).
 
+<!--
 Response options:
   i. Strongly Agree
   ii. Agree
@@ -458,7 +512,7 @@ Response options:
   v. Somewhat Disagree
   vi. Disagree
   vii. Strongly Disagree
-
+-->
 
 ```{r, fig.width=5, fig.height=5, echo=FALSE}
 
@@ -475,6 +529,9 @@ p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication'
 print(p)
 
 ```
+
+
+
 <!-- Field: Q18 -->
 10. Imagine you just found a great journal to target when submitting your next manuscript. You read the Instruction to Authors and discover the journal adheres to the Joint Data Archiving Policy (above). How strongly do you disagree/agree with the following statements? I am worried that ...
 	a.  others might do research I am currently working on  <!-- Field: Q18_1 -->
@@ -489,7 +546,25 @@ print(p)
 	j.  it might take me/us a lot of time to submit the data  <!-- Field:  Q18_10-->
 	k.  I might lose intellectual property or commercial opportunities  <!-- Field: Q18_11 -->
 	l.  Other worries (please specify)  <!-- Field: Q18_12/Q18_12_TEXT -->
-   
+
+
+```{r, fig.width=10, fig.height=5, echo=FALSE}
+
+library(ggplot2)
+library(reshape2)
+source("./src/plotLikert.R")
+
+responses <- c("Strongly Agree","Strongly Disagree") # response categories from top to bottom
+tmp <- melt(d, measure.vars=paste0('Q_10_',1:11 ))
+tmp$variable <- letters[gsub("Q_", "", tmp$variable) %>% gsub("10_", "", .) %>% as.integer]
+p <- plot_likert(tmp, response='value', var_x='PolicyAdoptedAtPublication', var_facet="variable", response_order=responses, above_mid="Strongly Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
+p <- p + theme(axis.text.x=element_text(angle=-90, size=8))
+
+print(p)
+
+```
+
+
 <!-- Field: Q19 -->
 11. Same instructions as the previous question: Imagine you just found a great journal to target when submitting your next manuscript. You read the Instruction to Authors and discover the journal adheres to the Joint Data Archiving Policy (above). How strongly do you disagree/agree with the following statements? I am pleased because...
 	a.  others will build upon my work more easily  <!-- Field: Q19_1  -->
@@ -503,12 +578,65 @@ print(p)
 	g.  my scientific area will develop better tools and/or training  <!-- Field: Q19_9  -->
 	h.  I think it is the right thing to do  <!-- Field: Q19_10  -->
 	i.  Other (please specify)  <!-- Field: Q19_11/Q19_11_TEXT  -->
-   
+
+
+```{r, fig.width=10, fig.height=5, echo=FALSE}
+
+library(ggplot2)
+library(reshape2)
+source("./src/plotLikert.R")
+
+responses <- c("Strongly Agree","Strongly Disagree") # response categories from top to bottom
+tmp <- melt(d, measure.vars=paste0('Q_11_',1:10 ))
+
+tmp$variable <- letters[gsub("Q_", "", tmp$variable) %>% gsub("11_", "", .) %>% as.integer]
+p <- plot_likert(tmp, response='value', var_x='PolicyAdoptedAtPublication', var_facet="variable", response_order=responses, above_mid="Strongly Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
+p <- p + theme(axis.text.x=element_text(angle=-90, size=8))
+
+print(p)
+
+```
+
+How strongly do you disagree/agree with the following statements?
+
 <!-- Field: Q21 -->
-12. How strongly do you disagree/agree with the following statements? Using datasets collected by investigators outside my research group is important in my research.
+12.  Using datasets collected by investigators outside my research group is important in my research.
+
+```{r, fig.width=7, fig.height=5, echo=FALSE}
+
+library(ggplot2)
+library(reshape2)
+source("./src/plotLikert.R")
+
+responses_agree_disagree <- c("Strongly Agree","Agree","Somewhat Agree","Somewhat Disagree","Disagree","Strongly Disagree") # response categories from top to bottom
+
+tmp <- melt(d, measure.vars=c('Q_12'))
+tmp$variable <- gsub("Q_", "Question ", tmp$variable)
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication', var_facet="variable", response_order=responses_agree_disagree, above_mid="Somewhat Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy")
+  
+print(p)
+
+```
+
 
 <!-- Field: Q22 -->
 13. Using datasets collected by investigators outside my research group is important in my teaching or other non-research projects.
+
+```{r, fig.width=7, fig.height=5, echo=FALSE}
+
+library(ggplot2)
+library(reshape2)
+source("./src/plotLikert.R")
+
+responses_agree_disagree <- c("Strongly Agree","Agree","Somewhat Agree","Somewhat Disagree","Disagree","Strongly Disagree") # response categories from top to bottom
+
+tmp <- melt(d, measure.vars=c('Q_13'))
+tmp$variable <- gsub("Q_", "Question ", tmp$variable)
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication', var_facet="variable", response_order=responses_agree_disagree, above_mid="Somewhat Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy")
+  
+print(p)
+
+```
 
 <!-- Field: Q23/Q23_TEXT -->
 14. Please choose the title that most closely matches yours:
@@ -520,81 +648,20 @@ print(p)
 16. Thank you for completing this survey! If you would like to enter the drawing for a $20 Amazon gif... <!-- TODO -->
 
 
-## Appendix B: Overview of responses to all questions
+## Appendix B: JDAP Adoption Dates
 
 
 
+```{r, fig.width=7, fig.height=5, echo=FALSE}
+library(knitr)
 
-## Questions 5
-5. To your knowledge, what are the policies of these stakeholders as they apply to online public archiving of the datasets associated with your (month) (year) publication in (journal)? Choose all that apply
-        a.  The journal  <!-- Field: Q11_1 -->
-        b.  Your funder(s)  <!-- Field: Q11_2 -->
-        c.  Your employer or institution  <!-- Field: Q11_3 -->
+journals_in_dataset <- unique(d$Journal)
+relevant_jdap_adoption_dates <- subset(jdap_adoption_dates, Journal %in% journals_in_dataset)
 
-```{r, fig.width=10, fig.height=5, echo=FALSE}
-
-library(ggplot2)
-library(reshape2)
-source("./src/plotLikert.R")
-
-responses <- c("Requires online public archiving","Recommends online public archiving","Forbids online public archiving")
-
-tmp <- melt(d, measure.vars=paste0('Q_5_',c(1:3) ))
-tmp$variable <- gsub("Q_", "Question ", tmp$variable)
-p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication', var_facet="variable", response_order=responses, above_mid="Recommends online public archiving", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
-  
-print(p)
+table <- subset(relevant_jdap_adoption_dates, policy == "Required")[,c('JournalName','policy_start_str')]
+colnames(table) <- c('Journal', 'Adoption Date of JDAP or Equivalent Policy')
+rownames(table) <- NULL
+kable(table)
 
 ```
 
-
-## Questions 6
-6. Are all datasets associated with your (month) (year) publication in (journal) publicly available online?
-a.  ALL datasets are publicly available online   <!-- Field: Q12_1 -->
-  b.  SOME but not all of the datasets are publicly available online   <!-- Field: Q12_2 -->
-  c.  NONE of the datasets are publicly available online   <!-- Field: Q12_3 -->
-  d.  I don't know   <!-- Field: Q12_4 -->
-e.  We did not collect any data for that publication   <!-- Field: Q12_5 -->
-f. Other (please specify)   <!-- Field: Q12_6/Q12_6_TEXT -->
-<!-- TODO: What is d$Q_6_7 ??? -->
-
-```{r, eval=FALSE, fig.width=10, fig.height=5, echo=FALSE}
-
-library(ggplot2)
-library(reshape2)
-library(plyr)
-library(dplyr)
-library(vcd)
-
-cnames <- paste0('Q_6_',1:6)
-x <- d[,cnames]
-new_cnames <- apply(x, 2, function(x) unique(x[x!=""])) 
-colnames(x) <- new_cnames
-x <- x!=""
-x
-
-res <- apply(x, 2, function(c1) apply(x, 2, function(c2) sum(c1&c2) ))
-res[lower.tri(res)] <- NA
-diag(res) <- NA
-res
-
-
-```
-
-
-
-## Questions 12, 13
-
-```{r, eval=FALSE, fig.width=7, fig.height=5, echo=FALSE}
-
-library(ggplot2)
-library(reshape2)
-source("./src/plotLikert.R")
-
-tmp <- melt(d, measure.vars=c('Q_12','Q_13'))
-tmp$variable <- gsub("Q_", "Question ", tmp$variable)
-p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication', var_facet="variable", response_order=responses_agree_disagree, above_mid="Somewhat Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy")
-
-print(p)
-
-```

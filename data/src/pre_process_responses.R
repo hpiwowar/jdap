@@ -63,7 +63,7 @@ sort(unique(d$journal))
 
 
 ### Recode responses to all questions using the agree-disagree scale
-questions_agree_disagree <- c('Q4','Q5','Q17',sprintf("Q18_%d",1:12),sprintf("Q19_%d",1:10), 'Q21', 'Q22')
+questions_agree_disagree <- c('Q4','Q5','Q17',sprintf("Q18_%d",1:12),sprintf("Q19_%d",1:11), 'Q21', 'Q22')
 mapping_agree_disagree <- c("Strongly disagree"="Strongly Disagree","Somewhat disagree"="Somewhat Disagree","Somewhat agree"="Somewhat Agree","Strongly agree"="Strongly Agree")
 levels_agree_disagree <- rev(c("Strongly Disagree","Disagree","Somewhat Disagree","Neutral","Somewhat Agree","Agree","Strongly Agree"))
 d <- assign_type_to_columns(d, questions_agree_disagree, mapping_agree_disagree, levels_agree_disagree, c("","."))  # TODO: What's with the dots in responses to questions 18-19
@@ -162,7 +162,8 @@ d <- select(d, ResponseID, ResponseDate, PublicationDate, Journal=journal, Q_1=Q
             Q_4_=starts_with("Q9"), Q_5_=starts_with("Q11"), Q_6_=starts_with("Q12"), Q_7_=starts_with("Q13"),
             Q_8_=starts_with("Q14"), Q_9=Q17, Q_10_=starts_with("Q18"), Q_11_=starts_with("Q19"),
             Q_12=Q21, Q_13=Q22, Q_14_=starts_with("Q23"), Q_15=Q25, Q_16=Q26 )
-d <- rename(d, Q_4_15_TEXT=Q_4_16, Q_4_16=Q_4_17, Q_6_6_TEXT=Q_6_7, Q_7_5_TEXT=Q_7_6, Q_7_6=Q_7_7  )
+d <- rename(d, Q_4_15_TEXT=Q_4_16, Q_4_16=Q_4_17, Q_6_6_TEXT=Q_6_7, Q_7_5_TEXT=Q_7_6, Q_7_6=Q_7_7, Q_8_8_TEXT=Q_8_9, 
+            Q_8_9=Q_8_10, Q_8_10=Q_8_11, Q_10_12_TEXT=Q_10_13, Q_11_11_TEXT=Q_11_12 )
 
 save(d, file="../JDAP_Survey_Data_Tidy.rda")
 write.csv(d, file="../JDAP_Survey_Data_Tidy.csv")

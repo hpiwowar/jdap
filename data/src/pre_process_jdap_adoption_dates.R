@@ -1,8 +1,8 @@
 dates <- read.csv("../info/Journal data archiving policies (as relevant to JDAP).csv", as.is=T)
 
 # extract only the relevant parts
-dates <- subset(dates, Abbreviation != "")[,c('Abbreviation','Policy.short','Date.policy.took.effect')]
-colnames(dates) <- c('journal', 'policy', 'policy_start')
+dates <- subset(dates, Abbreviation != "")[,c('Journal','Abbreviation','Policy.short','Date.policy.took.effect')]
+colnames(dates) <- c('JournalName','Journal', 'policy', 'policy_start')
 
 # reduce the number of policy categories
 dates[dates$policy=="Unclear", 'policy_start'] <- '-'
@@ -27,8 +27,6 @@ dates$policy_start_str <- dates$policy_start
 dates$policy_start <- ""
 dates$policy_start[!is.na(dates$policy_start_str)] <- parse_date(dates$policy_start_str[!is.na(dates$policy_start_str)]) %>% as.character
 dates$policy_start
-
-dates <- rename(dates, Journal=journal)
 
 write.table(dates, file="../Journal_JDAP_Adoption_Dates.csv")
 save(dates, file="../Journal_JDAP_Adoption_Dates.rda")

@@ -91,50 +91,61 @@ How strongly do you disagree/agree with the following statements? (Regarding the
 <!-- Field: Q4 -->
 1. It is the community norm in my field to share, with qualified researchers, datasets that support the results of peer-reviewed research articles. Include data sharing that occurs by any mechanism (e.g. emailing datasets upon request, posting datasets to lab websites, including datasets in journal supplementary information or data repositories).
 
+<!--
 _(Strongly Agree - Agree - Somewhat Agree - Neutral - Somewhat Disagree - Disagree - Strongly Disagree)_
+-->
+
+![](analysis_files/figure-html/unnamed-chunk-7-1.png) 
 
 <!-- Field: Q5 -->
 2. It is the community norm in my field to publicly archive all supporting datasets online, for use by anyone for any purpose, upon publication of a peer-reviewed research article.
 
+<!--
 _(Strongly Agree - Agree - Somewhat Agree - Neutral - Somewhat Disagree - Disagree - Strongly Disagree)_
-
-![](analysis_files/figure-html/unnamed-chunk-7-1.png) 
-
-<!-- Field: Q7 -->
-3. Do any of your published research papers have publicly archived datasets?
-
-  Response Options:
-  1. Yes, datasets from <b>5 or more papers</b> are publicly available on the internet
-  2. Yes, datasets from <b>2-4 papers</b> are publicly available on the internet
-  3. Yes, a dataset from <b>one paper</b> is publicly available on the internet  
-  4. No, none of my paper-related datasets are publicly available on the internet
-  5. I've never published a paper based on a dataset collected by me or my co-authors
-  6. I'm not sure if any of my papers have publicly available datasets
-
+-->
 
 ![](analysis_files/figure-html/unnamed-chunk-8-1.png) 
 
-<!-- Field: Q9 -->
-4. To your knowledge, how often have you experienced the following situations as a result of sharing the datasets behind your published research with investigators outside your research groups? Include experiences from datasets shared outside your research groups through any mechanism, including public archiving, selected distribution, or shared individually upon request (for example, in response to an email request).
-  a.  I formed new collaborations <!-- Field: Q9_1 -->
-	b.  I formed new collaborations that led/are leading to publications <!-- Field: Q9_2 -->
-	c.  I formed new collaborations that led/are leading to grants <!-- Field: Q9_3 -->
-	d.  Others have used my datasets and formally cited me <!-- Field: Q9_4 -->
-	e.  Others have used my datasets but did not formally cite me <!-- Field: Q9_5 -->
-	f.  Others have found errors in my research through my datasets <!-- Field: Q9_7 -->
-	g.  Others misinterpreted my datasets or used them inappropriately <!-- Field: Q9_8 -->
-	h.  I have had ongoing research projects scooped by another scientist <!-- Field: Q9_9 -->
-	i.  I have had future research plans scooped by another scientist <!-- Field: Q9_10 -->
-	j.  The ability of a junior colleague in my group (graduate student, postdoctoral fellow, or junior faculty member) to publish subsequent research has been compromised <!-- Field: Q9_11 -->
-	k.  My ability to receive commercial benefit from my research has been diminished <!-- Field: Q9_12 -->
-	l.  I spent a lot of money preparing data for sharing <!-- Field: Q9_13 -->
-	m.  I spent a lot of time preparing data for sharing <!-- Field: Q9_14 -->
-	n.  I spent a lot of time answering questions from qualified researchers about my shared data <!-- Field: Q9_15 -->
-	o.  I spent a lot of time answering questions from unqualified researchers about my shared data <!-- Field: Q9_17 -->
-	p.  Other (please specify) <!-- Field: Q9_16 / Q9_16_TEXT -->
+<!-- Field: Q7 -->
+3. Do any of your published research papers have publicly archived datasets?
+  a. Yes, datasets from <b>5 or more papers</b> are publicly available on the internet
+  b. Yes, datasets from <b>2-4 papers</b> are publicly available on the internet
+  c. Yes, a dataset from <b>one paper</b> is publicly available on the internet  
+  d. No, none of my paper-related datasets are publicly available on the internet
+  e. I've never published a paper based on a dataset collected by me or my co-authors
+  f. I'm not sure if any of my papers have publicly available datasets
 
 
 ![](analysis_files/figure-html/unnamed-chunk-9-1.png) 
+
+<!-- Field: Q9 -->
+4. To your knowledge, how often have you experienced the following situations as a result of sharing the datasets behind your published research with investigators outside your research groups? Include experiences from datasets shared outside your research groups through any mechanism, including public archiving, selected distribution, or shared individually upon request (for example, in response to an email request).
+  a.  I formed new collaborations <!-- Field: Q9_1 / Q_4_1 -->
+	b.  I formed new collaborations that led/are leading to publications <!-- Field: Q9_2 / Q_4_2 -->
+	c.  I formed new collaborations that led/are leading to grants <!-- Field: Q9_3 / Q_4_3 -->
+	d.  Others have used my datasets and formally cited me <!-- Field: Q9_4 / Q_4_4 -->
+	e.  Others have used my datasets but did not formally cite me <!-- Field: Q9_5 / Q_4_5 -->
+	f.  Others have found errors in my research through my datasets <!-- Field: Q9_7 / Q_4_6 -->
+	g.  Others misinterpreted my datasets or used them inappropriately <!-- Field: Q9_8 / Q_4_7 -->
+	h.  I have had ongoing research projects scooped by another scientist <!-- Field: Q9_9 / Q_4_8 -->
+	i.  I have had future research plans scooped by another scientist <!-- Field: Q9_10 / Q_4_9 -->
+	j.  The ability of a junior colleague in my group (graduate student, postdoctoral fellow, or junior faculty member) to publish subsequent research has been compromised <!-- Field: Q9_11 / Q_4_10 -->
+	k.  My ability to receive commercial benefit from my research has been diminished <!-- Field: Q9_12 / Q_4_11 -->
+	l.  I spent a lot of money preparing data for sharing <!-- Field: Q9_13 / Q_4_12 -->
+	m.  I spent a lot of time preparing data for sharing <!-- Field: Q9_14 / Q_4_13 -->
+	n.  I spent a lot of time answering questions from qualified researchers about my shared data <!-- Field: Q9_15 / Q_4_14 -->
+	o.  Other (please specify) <!-- Field: Q9_16 - Q9_16_TEXT / Q_4_15 - Q_4_15_TEXT -->
+  p.  I spent a lot of time answering questions from unqualified researchers about my shared data <!-- Field: Q9_17 / Q_4_16 -->
+
+<!--
+  Response Options:
+  1. Many times
+  2. A few times
+  3. Once
+  4. Never
+-->
+
+![](analysis_files/figure-html/unnamed-chunk-10-1.png) 
 
 <!-- Field: Q11-->
 5. To your knowledge, what are the policies of these stakeholders as they apply to online public archiving of the datasets associated with your (month) (year) publication in (journal)? Choose all that apply
@@ -142,14 +153,22 @@ _(Strongly Agree - Agree - Somewhat Agree - Neutral - Somewhat Disagree - Disagr
 	b.  Your funder(s)  <!-- Field: Q11_2 -->
 	c.  Your employer or institution  <!-- Field: Q11_3 -->
   
+
+![](analysis_files/figure-html/unnamed-chunk-11-1.png) 
+
 <!-- Field: Q12 -->
 6. Are all datasets associated with your (month) (year) publication in (journal) publicly available online?
+
+Response options:
 	a.  ALL datasets are publicly available online   <!-- Field: Q12_1 -->
 	b.  SOME but not all of the datasets are publicly available online   <!-- Field: Q12_2 -->
 	c.  NONE of the datasets are publicly available online   <!-- Field: Q12_3 -->
 	d.  I don't know   <!-- Field: Q12_4 -->
 	e.  We did not collect any data for that publication   <!-- Field: Q12_5 -->
 	f. Other (please specify)   <!-- Field: Q12_6/Q12_6_TEXT -->
+
+
+
   
 <!-- Field: Q13 -->
 7. IF ALL or SOME datasets associated with this paper are publicly available, where are the datasets hosted?
@@ -160,6 +179,9 @@ _(Strongly Agree - Agree - Somewhat Agree - Neutral - Somewhat Disagree - Disagr
 	e.  Other (please specify)   <!-- Field: Q13_5/Q13_5_TEXT -->
 	f.  Not applicable   <!-- Field: Q13_6 -->
   
+  
+![](analysis_files/figure-html/unnamed-chunk-13-1.png) 
+
 <!-- Field: Q14 -->
 8. If NONE or only SOME of the datasets are publicly available, which of the following reflect your experience for the dataset(s) not publicly available, for this paper? Choose all that apply.
 	a.  The dataset has been submitted to a repository and is currently under embargo  <!-- Field: Q14_1 -->
@@ -173,11 +195,15 @@ _(Strongly Agree - Agree - Somewhat Agree - Neutral - Somewhat Disagree - Disagr
 	i.  Not applicable  <!-- Field: Q14_9 -->
 	j.  We wanted to publicly archive the data but were not able to, due to licencing or funder restrictions  <!-- Field: Q14_10 -->
   
+  
+![](analysis_files/figure-html/unnamed-chunk-14-1.png) 
+  
 The questions below refer to the Joint Data Archiving Policy, an example policy statement adopted by ... <!-- TODO -->
 
 <!-- Field: Q17 -->
 9. How strongly do you disagree/agree with this statement? I would seek alternative journals if I learned that my target journal had adopted the Joint Data Archiving Policy (above).
 
+<!--
 Response options:
   i. Strongly Agree
   ii. Agree
@@ -186,9 +212,12 @@ Response options:
   v. Somewhat Disagree
   vi. Disagree
   vii. Strongly Disagree
+-->
+
+![](analysis_files/figure-html/unnamed-chunk-15-1.png) 
 
 
-![](analysis_files/figure-html/unnamed-chunk-10-1.png) 
+
 <!-- Field: Q18 -->
 10. Imagine you just found a great journal to target when submitting your next manuscript. You read the Instruction to Authors and discover the journal adheres to the Joint Data Archiving Policy (above). How strongly do you disagree/agree with the following statements? I am worried that ...
 	a.  others might do research I am currently working on  <!-- Field: Q18_1 -->
@@ -203,7 +232,11 @@ Response options:
 	j.  it might take me/us a lot of time to submit the data  <!-- Field:  Q18_10-->
 	k.  I might lose intellectual property or commercial opportunities  <!-- Field: Q18_11 -->
 	l.  Other worries (please specify)  <!-- Field: Q18_12/Q18_12_TEXT -->
-   
+
+
+![](analysis_files/figure-html/unnamed-chunk-16-1.png) 
+
+
 <!-- Field: Q19 -->
 11. Same instructions as the previous question: Imagine you just found a great journal to target when submitting your next manuscript. You read the Instruction to Authors and discover the journal adheres to the Joint Data Archiving Policy (above). How strongly do you disagree/agree with the following statements? I am pleased because...
 	a.  others will build upon my work more easily  <!-- Field: Q19_1  -->
@@ -217,12 +250,22 @@ Response options:
 	g.  my scientific area will develop better tools and/or training  <!-- Field: Q19_9  -->
 	h.  I think it is the right thing to do  <!-- Field: Q19_10  -->
 	i.  Other (please specify)  <!-- Field: Q19_11/Q19_11_TEXT  -->
-   
+
+
+![](analysis_files/figure-html/unnamed-chunk-17-1.png) 
+
+How strongly do you disagree/agree with the following statements?
+
 <!-- Field: Q21 -->
-12. How strongly do you disagree/agree with the following statements? Using datasets collected by investigators outside my research group is important in my research.
+12.  Using datasets collected by investigators outside my research group is important in my research.
+
+![](analysis_files/figure-html/unnamed-chunk-18-1.png) 
+
 
 <!-- Field: Q22 -->
 13. Using datasets collected by investigators outside my research group is important in my teaching or other non-research projects.
+
+![](analysis_files/figure-html/unnamed-chunk-19-1.png) 
 
 <!-- Field: Q23/Q23_TEXT -->
 14. Please choose the title that most closely matches yours:
@@ -234,34 +277,35 @@ Response options:
 16. Thank you for completing this survey! If you would like to enter the drawing for a $20 Amazon gif... <!-- TODO -->
 
 
-## Appendix B: Overview of responses to all questions
+## Appendix B: JDAP Adoption Dates
 
 
 
 
-## Questions 5
-5. To your knowledge, what are the policies of these stakeholders as they apply to online public archiving of the datasets associated with your (month) (year) publication in (journal)? Choose all that apply
-        a.  The journal  <!-- Field: Q11_1 -->
-        b.  Your funder(s)  <!-- Field: Q11_2 -->
-        c.  Your employer or institution  <!-- Field: Q11_3 -->
-
-![](analysis_files/figure-html/unnamed-chunk-11-1.png) 
-
-
-## Questions 6
-6. Are all datasets associated with your (month) (year) publication in (journal) publicly available online?
-a.  ALL datasets are publicly available online   <!-- Field: Q12_1 -->
-  b.  SOME but not all of the datasets are publicly available online   <!-- Field: Q12_2 -->
-  c.  NONE of the datasets are publicly available online   <!-- Field: Q12_3 -->
-  d.  I don't know   <!-- Field: Q12_4 -->
-e.  We did not collect any data for that publication   <!-- Field: Q12_5 -->
-f. Other (please specify)   <!-- Field: Q12_6/Q12_6_TEXT -->
-<!-- TODO: What is d$Q_6_7 ??? -->
-
-
-
-
-
-## Questions 12, 13
-
+Journal                                                   Adoption Date of JDAP or Equivalent Policy 
+--------------------------------------------------------  -------------------------------------------
+American Naturalist                                       01.01.2011                                 
+Biological Journal of the Linnean Society                 18.09.2010-03.09.2011                      
+Biology Letters                                           01.09.2014-29.10.2014                      
+Ecological Applications                                   01.01.2014                                 
+Ecological Monographs                                     01.01.2011                                 
+Evolution                                                 01.01.2011                                 
+Evolutionary Applications                                 01.01.2011                                 
+Functional Ecology                                        05.10.2012-5.12.2012                       
+GENETICS                                                  01.01.2010                                 
+Heredity                                                  01.03.2011                                 
+Journal of Animal Ecology                                 01.12.2012                                 
+Journal of Ecology                                        5.5.2013 - 3.6.2013                        
+Journal of Evolutionary Biology                           24.8.2011 – 24.10.2011                     
+Journal of Heredity                                       01.01.2013                                 
+Molecular Biology and Evolution                           01.01.2010-31.12.2010                      
+Molecular Ecology                                         01.01.2011                                 
+Oikos                                                     <06.03.2014                                
+PLoS Biology                                              12.10.2014-14.11.2014                      
+Systematic Biology                                        01.01.2010-31.12.2010                      
+BMC Biology                                               >19.08.2014                                
+Genome research                                           <06.07.2008                                
+New Phytologist                                           <23.11.2010                                
+Proceedings of the Royal Society B: Biological Sciences   <20.03.2013                                
+The Plant Journal                                         < 18.08.2010                               
 
