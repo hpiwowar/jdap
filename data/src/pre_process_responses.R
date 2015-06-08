@@ -3,15 +3,7 @@ library(plyr)
 library(dplyr)
 library(tidyr)
 library(assertthat)
-
-vmap <- function (vec, from, to) {
-  newVec <- vec
-  for (i in 1:length(from)) {
-    newVec[vec == from[i]] <- to[i]
-  }
-  return(newVec)
-}
-nmap <- function (vec, fromto, cast = I) cast(vmap(vec, names(fromto), fromto))
+source("../../src/aux_functions.R")
 
 assign_type_to_columns <- function(d, questions, mapping, levels, to_NA, type=ordered) {
   expected_levels  <- c(levels, to_NA)
@@ -149,7 +141,6 @@ d$Q11_3[d$Q11_3 == ""] <- NA
 # cur_d[several_values,] <- ""
 # d$Q12 <- unique_nonempty(cur_d)
 
-library(parsedate)
 library(plyr)
 library(dplyr)
 library(zoo)

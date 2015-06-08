@@ -1,0 +1,9 @@
+base
+plyr
+dplyr
+knitr
+RColorBrewer
+parsedate
+zoo
+ggplot2
+assertthat

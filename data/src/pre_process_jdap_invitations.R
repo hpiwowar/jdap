@@ -1,4 +1,7 @@
-library(parsedate)
+library(zoo)
+library(plyr)
+library(dplyr)
+source("../../src/aux_functions.R")
 
 d <- read.csv("../raw_data/Invitations_Timing.csv", as.is=T)
 

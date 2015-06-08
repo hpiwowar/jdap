@@ -1,3 +1,8 @@
+library(dplyr)
+library(zoo)
+source("../../src/aux_functions.R")
+
+
 dates <- read.csv("../info/Journal data archiving policies (as relevant to JDAP).csv", as.is=T)
 
 # extract only the relevant parts
@@ -12,11 +17,6 @@ dates[dates$policy=="SomeDataTypesRequired", 'policy'] <- 'Encouraged'
 dates[dates$policy_start=='-','policy_start'] <- NA
 #date_boundary <- grepl("[<>]", dates$policy_start)
 #date_range <- grepl("-", dates$policy_start)
-
-
-library(dplyr)
-library(parsedate)
-library(zoo)
 
 # parse_date() can deal with extra characters and the sort of ranges defined here. It uses the second date in the range.
 # parse_date("< 18.08.2010")
