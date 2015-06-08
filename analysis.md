@@ -59,26 +59,26 @@ The following table shows the estimated coefficients and 95\%-confidence interva
 
 
 
-We conducted two likelihood-ratio tests to assess the effect of change in policy and the other predictors on reported attitudes. The first likelihood-ratio test, comparing the full three-predictor model with a reduced model _without_ the effect of policy change revealed a significantly better fit for the full model ($\chi^2(1)=13.51$, $p<0.001$). A second likelihood-ratio test comparing the full model with a reduced model using _only_ the policy change predictor (_cAfterPolicyChange_) revealed no statistically significantly difference ($\chi^2(2)=2.77$, $p=0.25$).
+We conducted two likelihood-ratio tests to assess the effect of change in policy and the other predictors on reported attitudes. The first likelihood-ratio test, comparing the full three-predictor model with a reduced model _without_ the effect of policy change revealed a significantly better fit for the full model ($\chi^2(1)=79.38$, $p<0.001$). A second likelihood-ratio test comparing the full model with a reduced model using _only_ the policy change predictor (_cAfterPolicyChange_) revealed no statistically significantly difference ($\chi^2(2)=7.76$, $p=0.02$).
 
 <!-- http://kbroman.org/knitr_knutshell/pages/figs_tables.html -->
 
                         OR   2.5 %   97.5 %      t
 -------------------  -----  ------  -------  -----
-cAfterPolicyChange    1.36    1.16      1.6    3.7
-cNonJDAPJournal       0.92    0.80      1.1   -1.1
-cDate                 0.97    0.91      1.0   -1.0
+cAfterPolicyChange    2.13    1.80     2.52    8.9
+cNonJDAPJournal       1.15    1.00     1.32    2.0
+cDate                 0.93    0.88     0.99   -2.3
 
 The following table shows the estimated coefficients and 95\%-confidence intervals (transformed to odds ratios) for responses to *question 2*. According to the model estimates, the introduction of the JDAP data archiving policy significantly increases the odds of a positive response regarding *data archiving* by a factor of $1.57$ (CI=$[1.33; 1.90]$), while the remaining two predictors do not show any statistically significant effects.
 
-Here too, we conducted two likelihood-ratio tests to assess the effect of change in policy and the other predictors on reported attitudes. The first likelihood-ratio test, comparing the full three-predictor model with a reduced model _without_ the effect of policy change revealed a significantly better fit for the full model ($\chi^2(1)=29.19$, $p<0.001$). A second likelihood-ratio test comparing the full model with a reduced model using _only_ the policy change predictor (_cAfterPolicyChange_) revealed no statistically significantly difference ($\chi^2(2)=1.42$, $p=0.49$).
+Here too, we conducted two likelihood-ratio tests to assess the effect of change in policy and the other predictors on reported attitudes. The first likelihood-ratio test, comparing the full three-predictor model with a reduced model _without_ the effect of policy change revealed a significantly better fit for the full model ($\chi^2(1)=148.35$, $p<0.001$). A second likelihood-ratio test comparing the full model with a reduced model using _only_ the policy change predictor (_cAfterPolicyChange_) revealed no statistically significantly difference ($\chi^2(2)=9.37$, $p=0.01$).
 
 
                         OR   2.5 %   97.5 %       t
 -------------------  -----  ------  -------  ------
-cAfterPolicyChange    1.57    1.33      1.9    5.40
-cNonJDAPJournal       0.93    0.81      1.1   -1.00
-cDate                 1.03    0.97      1.1    0.82
+cAfterPolicyChange    2.79    2.36      3.3   12.11
+cNonJDAPJournal       1.24    1.08      1.4    3.04
+cDate                 0.97    0.92      1.0   -0.89
 
 
 # Appendix

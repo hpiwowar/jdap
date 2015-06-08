@@ -9,11 +9,11 @@ Let's take a look at the numbers of responses by response date and publication d
 
 ```{r, cache=TRUE, message=FALSE, echo=FALSE}
 
-library(parsedate)
 library(dplyr)
 library(zoo)
 library(ggplot2)
 library(assertthat)
+source("./src/aux_functions.R")
 
 load("./data/JDAP 2_clean.rda")
 load("./data/jdap_dates.rda")

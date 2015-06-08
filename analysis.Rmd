@@ -59,12 +59,12 @@ Some researchers are sceptical regarding data archiving. We conducted a survey i
 
 ```{r, cache=TRUE, message=FALSE, echo=FALSE}
 
-library(parsedate)
 library(plyr)
 library(dplyr)
 library(zoo)
 library(ggplot2)
 library(assertthat)
+source("./src/aux_functions.R")
 
 load("./data/JDAP_Survey_Data_Tidy.rda") # loads 'd'
 load("./data/Journal_JDAP_Adoption_Dates.rda") # loads 'dates'
@@ -88,15 +88,19 @@ d$PublicationDate_YM <- as.yearmon(d$PublicationDate) %>% as.character
 d$PublicationDate_YQ <- as.yearqtr(d$PublicationDate) %>% as.character
 d$PublicationDate_Y  <- strftime(d$PublicationDate, "%Y") %>% as.character
 
-# determine time since JDAP introduction in the journal where the article was published
-d$DaysPolicyToPublication <- difftime(d$PublicationDate, parse_date(d$policy_start), units="days")
-d$DaysPolicyToResponse <- difftime(d$ResponseDate, parse_date(d$policy_start), units="days") 
+d$PolicyStartDate <- parse_date(d$policy_start)
 
-d$PolicyAdoptedAtPublication <- ifelse(d$DaysPolicyToPublication>0, "After JDAP", "Before JDAP")
-d$PolicyAdoptedAtResponse <- ifelse(d$DaysPolicyToResponse>0, "After JDAP", "Before JDAP")
-d$PolicyAdoptedAtPublication[is.na(d$PolicyAdoptedAtPublication)] <- "No JDAP"
-d$PolicyAdoptedAtResponse[is.na(d$PolicyAdoptedAtResponse)] <- "No JDAP"
-# d$PolicyBinary <- ifelse(d$policy=="Required", "JDAP", "No JDAP")
+# determine time since JDAP introduction in the journal where the article was published
+d$DaysPolicyToPublication <- difftime(d$PublicationDate, d$PolicyStartDate, units="days")
+d$DaysPolicyToResponse <- difftime(d$ResponseDate, d$PolicyStartDate, units="days") 
+
+levels_TimeClass <- c("No JDAP","Before JDAP","After JDAP") 
+levels_TimeClassByYear <- c("No\nJDAP","Before\nJDAP","1st Year\nAfter\nJDAP", "1+ Year\nAfter\nJDAP") 
+d$PolicyAdoptedAtPublication <- ifelse(is.na(d$DaysPolicyToPublication), levels_TimeClass[1], ifelse(d$DaysPolicyToPublication<0, levels_TimeClass[2], levels_TimeClass[3]))
+d$PolicyAdoptedAtResponse <- ifelse(is.na(d$DaysPolicyToResponse), levels_TimeClass[1], ifelse(d$DaysPolicyToResponse<0, levels_TimeClass[2], levels_TimeClass[3]))
+
+d$PolicyAdoptedAtPublicationByYears <- ifelse(is.na(d$DaysPolicyToPublication), levels_TimeClassByYear[1], ifelse(d$DaysPolicyToPublication<0, levels_TimeClassByYear[2], ifelse(d$DaysPolicyToPublication<365, levels_TimeClassByYear[3], levels_TimeClassByYear[4] )))
+d$PolicyAdoptedAtResponseByYears <- ifelse(is.na(d$DaysPolicyToResponse), levels_TimeClassByYear[1], ifelse(d$DaysPolicyToResponse<0, levels_TimeClassByYear[2], ifelse(d$DaysPolicyToResponse<365, levels_TimeClassByYear[3], levels_TimeClassByYear[4] )))
 
 # NOTE: two invitations have NA for a publication date
 # subset(invitation_timing, is.na(publication_date))
@@ -106,7 +110,18 @@ invitation_timing$PublicationDate_YQ <- as.character(invitation_timing$publicati
 n_invitations_by_publication <- ddply(invitation_timing, .(Date=PublicationDate_YQ), summarize, N=length(PublicationDate_YQ))
 n_invitations_by_sent_month <- ddply(invitation_timing, .(Date=as.yearmon(sent_date)), summarize, N=length(PublicationDate_YQ))
 
-d$label_PolicyAdoptedAtPublication <- gsub(" ", "\n", d$PolicyAdoptedAtPublication)
+# unique(d$PolicyAdoptedAtPublication)
+# d$label_PolicyAdoptedAtPublication <- ordered(d$PolicyAdoptedAtPublication, levels=c("No\nJDAP", "Before\nJDAP", "After\nJDAP"))
+d$label_PolicyAdoptedAtPublication <- ordered(gsub(" ","\n",d$PolicyAdoptedAtPublication), levels=gsub(" ","\n",levels_TimeClass))
+
+# Note: These are very surprising responses
+# d_unexpected_responses <- subset(d, label_PolicyAdoptedAtPublication==levels_TimeClassByYear[4]) %>% subset(Q_9 == "Strongly Agree")
+#d_unexpected_responses$Q_9 %>% summary
+#summary(as.factor(d_unexpected_responses$Journal))
+#d_unexpected_responses %>% head(2)
+
+#head(d_unexpected_responses,3)
+#subset(d_unexpected_responses, )
 
 ```
 
@@ -157,12 +172,15 @@ library(reshape2)
 source("./src/plotLikert.R")
 
 responses <- c("Strongly Agree","Agree","Somewhat Agree","Somewhat Disagree","Disagree","Strongly Disagree") # response categories from top to bottom
-
+question_labels <- c('Q_1'='"Data sharing is a community norm."\n(Question 1)',
+                     'Q_2'='"Data archiving is a community norm."\n(Question 2)',
+                     'Q_9'='"I would seek alternative journals\nif JDAP was introduced."\n(Question 9)')
 tmp <- melt(d, measure.vars=c('Q_1','Q_2','Q_9')) #,'Q_12','Q_13'))
-tmp$variable <- gsub("Q_", "Question ", tmp$variable)
+tmp$variable <- as.character(tmp$variable)
+tmp$variable <- ordered(nmap(tmp$variable, question_labels), levels=question_labels)
+#tmp$variable <- gsub("Q_", "Question ", tmp$variable) # gsub("Q_", "Question ", tmp$variable)
 
 p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication', var_facet="variable", response_order=responses, above_mid="Somewhat Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy")
-  
 print(p)
 
 ```
@@ -185,7 +203,6 @@ d$cDate <- as.double(as.yearmon(d$PublicationDate)) %>% scale(., scale=F)
 
 d$respQ1 <- ordered(d$Q_1, levels=rev(levels(d$Q_1)))
 d$respQ2 <- ordered(d$Q_2, levels=rev(levels(d$Q_2)))
-
 
 m4 <- polr(respQ1 ~ 1 + cAfterPolicyChange + cNonJDAPJournal + cDate, data=d , Hess=TRUE)
 # summary(m4)
