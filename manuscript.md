@@ -180,18 +180,6 @@ some more: [@2015thank-y; @anagnostou2015when-da; @nosek2015scienti; @stodden201
 ## Methods
 
 
-## Data pre-processing
-
-Let's take a look at the numbers of responses by response date and publication date. Please keep in mind that the JDAP adoption dates used in the following analysis are approximate.
-
-
-```
-## [1] TRUE
-```
-
-![](manuscript_files/figure-html/unnamed-chunk-2-1.png)<!-- -->![](manuscript_files/figure-html/unnamed-chunk-2-2.png)<!-- -->
-
-
 
 # Introduction
 Some researchers are sceptical regarding data archiving. We conducted a survey in order to find out how the adoption of data archiving policies by journals affects researcher's attitudes towards archiving and sharing data.
@@ -200,8 +188,6 @@ Some researchers are sceptical regarding data archiving. We conducted a survey i
 
 ## Method
 
-<!-- load and prepare data -->
-
 
 
 The survey was carried out using [Survey Monkey](www.surveymonkey.com). Invitations to participate were sent out monthly between February 2011 and March 2014 to a selection of between $605$ and $4763$ (with an average of $2168$) authors of recently published articles in a pre-selected sample of journals. 
@@ -209,10 +195,6 @@ The survey was carried out using [Survey Monkey](www.surveymonkey.com). Invitati
 The invitations were sent out to a total of $23853$ authors, and $4102$ responded (corresponding to a non-response rate of $17$\%).
 Figure 1 shows the numbers of invitations and responses by the date of the author's last publication.
 Participants filled in a questionnaire consisting of 15 multiple-choice questions regarding their attitudes, concerns and experiences with data archiving and sharing.
-
-![Number of invitations and responses by quarter.](manuscript_files/figure-html/responseRates-1.png)
-
-<!-- TODO: how were the responses spread out over journal types? when was the JDAP introduced when it was introduced, mean and SD? -->
 
 
 ## Results
@@ -227,7 +209,7 @@ In the following, I will present an overview of the responses to questions 1, 2,
 
 The following plots show the responses regarding the attitudes towards data sharing and archiving for participants who (i) published in journals which have note adopted the JDAP so far ('No JDAP'), (ii) published in journals which had not _yet_ adopted the JDAP before publication ('Before JDAP'), and (iii) journals which had adopted the JDAP before publication ('After JDAP).
 
-![](manuscript_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+![](manuscript_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
 
 
 
@@ -281,7 +263,7 @@ How strongly do you disagree/agree with the following statements? (Regarding the
 _(Strongly Agree - Agree - Somewhat Agree - Neutral - Somewhat Disagree - Disagree - Strongly Disagree)_
 -->
 
-![](manuscript_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
+![](manuscript_files/figure-html/unnamed-chunk-8-1.png)<!-- -->
 
 <!-- Field: Q5 -->
 2. It is the community norm in my field to publicly archive all supporting datasets online, for use by anyone for any purpose, upon publication of a peer-reviewed research article.
@@ -290,7 +272,7 @@ _(Strongly Agree - Agree - Somewhat Agree - Neutral - Somewhat Disagree - Disagr
 _(Strongly Agree - Agree - Somewhat Agree - Neutral - Somewhat Disagree - Disagree - Strongly Disagree)_
 -->
 
-![](manuscript_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
+![](manuscript_files/figure-html/unnamed-chunk-9-1.png)<!-- -->
 
 <!-- Field: Q7 -->
 3. Do any of your published research papers have publicly archived datasets?
@@ -302,7 +284,7 @@ _(Strongly Agree - Agree - Somewhat Agree - Neutral - Somewhat Disagree - Disagr
   f. I'm not sure if any of my papers have publicly available datasets
 
 
-![](manuscript_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
+![](manuscript_files/figure-html/unnamed-chunk-10-1.png)<!-- -->
 
 <!-- Field: Q9 -->
 4. To your knowledge, how often have you experienced the following situations as a result of sharing the datasets behind your published research with investigators outside your research groups? Include experiences from datasets shared outside your research groups through any mechanism, including public archiving, selected distribution, or shared individually upon request (for example, in response to an email request).
@@ -331,17 +313,17 @@ _(Strongly Agree - Agree - Somewhat Agree - Neutral - Somewhat Disagree - Disagr
   4. Never
 -->
 
-![](manuscript_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
+![](manuscript_files/figure-html/unnamed-chunk-11-1.png)<!-- -->
 
 And again, this time limited to people with at least one paper with archived data:
 
-![](manuscript_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
+![](manuscript_files/figure-html/unnamed-chunk-12-1.png)<!-- -->
 
 And one more time, for people with no archived data:
 
 And again, this time limited to people with at least one paper with archived data:
 
-![](manuscript_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
+![](manuscript_files/figure-html/unnamed-chunk-13-1.png)<!-- -->
 <!-- Field: Q11-->
 5. To your knowledge, what are the policies of these stakeholders as they apply to online public archiving of the datasets associated with your (month) (year) publication in (journal)? Choose all that apply
 	a.  The journal  <!-- Field: Q11_1 -->
@@ -349,7 +331,7 @@ And again, this time limited to people with at least one paper with archived dat
 	c.  Your employer or institution  <!-- Field: Q11_3 -->
   
 
-![](manuscript_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+![](manuscript_files/figure-html/unnamed-chunk-14-1.png)<!-- -->
 
 <!-- Field: Q12 -->
 6. Are all datasets associated with your (month) (year) publication in (journal) publicly available online?
@@ -375,7 +357,7 @@ Response options:
 	f.  Not applicable   <!-- Field: Q13_6 -->
   
   
-![](manuscript_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+![](manuscript_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
 
 <!-- Field: Q14 -->
 8. If NONE or only SOME of the datasets are publicly available, which of the following reflect your experience for the dataset(s) not publicly available, for this paper? Choose all that apply.
@@ -391,7 +373,7 @@ Response options:
 	j.  We wanted to publicly archive the data but were not able to, due to licencing or funder restrictions  <!-- Field: Q14_10 -->
   
   
-![](manuscript_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
+![](manuscript_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
   
 The questions below refer to the Joint Data Archiving Policy, an example policy statement adopted by ... <!-- TODO -->
 
@@ -409,7 +391,7 @@ Response options:
   vii. Strongly Disagree
 -->
 
-![](manuscript_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
+![](manuscript_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
 
 
 
@@ -429,7 +411,7 @@ Response options:
 	l.  Other worries (please specify)  <!-- Field: Q18_12/Q18_12_TEXT -->
 
 
-![](manuscript_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
+![](manuscript_files/figure-html/unnamed-chunk-19-1.png)<!-- -->
 
 
 <!-- Field: Q19 -->
@@ -447,20 +429,20 @@ Response options:
 	i.  Other (please specify)  <!-- Field: Q19_11/Q19_11_TEXT  -->
 
 
-![](manuscript_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
+![](manuscript_files/figure-html/unnamed-chunk-20-1.png)<!-- -->
 
 How strongly do you disagree/agree with the following statements?
 
 <!-- Field: Q21 -->
 12.  Using datasets collected by investigators outside my research group is important in my research.
 
-![](manuscript_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
+![](manuscript_files/figure-html/unnamed-chunk-21-1.png)<!-- -->
 
 
 <!-- Field: Q22 -->
 13. Using datasets collected by investigators outside my research group is important in my teaching or other non-research projects.
 
-![](manuscript_files/figure-html/unnamed-chunk-23-1.png)<!-- -->
+![](manuscript_files/figure-html/unnamed-chunk-22-1.png)<!-- -->
 
 <!-- Field: Q23/Q23_TEXT -->
 14. Please choose the title that most closely matches yours:

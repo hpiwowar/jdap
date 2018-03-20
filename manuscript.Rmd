@@ -215,57 +215,6 @@ bib["fetterman2015the-rep"]
 ## Methods
 
 
-## Data pre-processing
-
-Let's take a look at the numbers of responses by response date and publication date. Please keep in mind that the JDAP adoption dates used in the following analysis are approximate.
-
-```{r, cache=TRUE, message=FALSE, echo=FALSE}
-
-library(parsedate)
-library(dplyr)
-library(zoo)
-library(ggplot2)
-library(assertthat)
-
-load("./data/JDAP 2_clean.rda")
-load("./data/jdap_dates.rda")
-
-# add the journal info to the main dataset
-assert_that( all(d$journal %in% dates$journal) )
-d <- left_join(d, dates, by="journal")
-
-# format publication and response dates
-d$PublicationDate <- parse_date(with(d, paste(month, year)))
-d$ResponseDate <- parse_date(d$StartDate) %>% as.yearmon %>% as.POSIXct
-
-d$ResponseDate_YM <- as.yearmon(d$ResponseDate) %>% as.character
-d$ResponseDate_YQ <- as.yearqtr(d$ResponseDate) %>% as.character
-d$ResponseDate_Y <- strftime(d$ResponseDate, "%Y") %>% as.character
-
-d$PublicationDate_YM <- as.yearmon(d$PublicationDate) %>% as.character
-d$PublicationDate_YQ <- as.yearqtr(d$PublicationDate) %>% as.character
-d$PublicationDate_Y  <- strftime(d$PublicationDate, "%Y") %>% as.character
-
-# determine time since JDAP introduction in the journal where the article was published
-d$DaysPolicyToPublication <- difftime(d$PublicationDate, parse_date(d$policy_start), units="days")
-d$DaysPolicyToResponse <- difftime(d$ResponseDate, parse_date(d$policy_start), units="days") 
-
-d$PolicyAdoptedAtPublication <- ifelse(d$DaysPolicyToPublication>0, "After JDAP", "Before JDAP")
-d$PolicyAdoptedAtResponse <- ifelse(d$DaysPolicyToResponse>0, "After JDAP", "Before JDAP")
-d$PolicyAdoptedAtPublication[is.na(d$PolicyAdoptedAtPublication)] <- "No JDAP"
-d$PolicyAdoptedAtResponse[is.na(d$PolicyAdoptedAtResponse)] <- "No JDAP"
-d$PolicyBinary <- ifelse(d$policy=="Required", "JDAP", "No JDAP")
-
-# number of responses by response date and journal policy in 2015
-group_by(d, Date=ResponseDate_YQ, policy) %>% dplyr::summarize(N=length(StartDate)) %>% ggplot(aes(Date, N, color=policy, group=policy))+geom_point()+geom_line()+theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Number of participants by response date.")
-
-# number of responses by publication date and journal policy in 2015
-group_by(d, Date=PublicationDate_YQ, policy) %>% dplyr::summarize(N=length(PublicationDate)) %>% ggplot(aes(Date, N, color=policy, group=policy))+geom_point()+geom_line()+theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Number of participants by publication date.")
-
-# It seems to make more sense to focus on the publication date for plotting, until it is clear why there are hardly any responses from the second half of 2013.
-```
-
-
 
 # Introduction
 Some researchers are sceptical regarding data archiving. We conducted a survey in order to find out how the adoption of data archiving policies by journals affects researcher's attitudes towards archiving and sharing data.
@@ -273,8 +222,6 @@ Some researchers are sceptical regarding data archiving. We conducted a survey i
 # The Survey
 
 ## Method
-
-<!-- load and prepare data -->
 
 ```{r, cache=TRUE, message=FALSE, echo=FALSE}
 
@@ -285,9 +232,9 @@ library(ggplot2)
 library(assertthat)
 source("./src/aux_functions.R")
 
-load("./data/JDAP_Survey_Data_Tidy.rda") # loads 'd'
-load("./data/Journal_JDAP_Adoption_Dates.rda") # loads 'dates'
-load("./data/Invitations_Timing.rda") # loads 'invitation_timing'
+load("./data/derived/JDAP_Survey_Data_Tidy.rda") # loads 'd'
+load("./data/derived/Journal_JDAP_Adoption_Dates.rda") # loads 'dates'
+load("./data/derived/Invitations_Timing.rda") # loads 'invitation_timing'
 interactive_mode <- FALSE
 jdap_adoption_dates <- dates
 
@@ -349,27 +296,6 @@ The survey was carried out using [Survey Monkey](www.surveymonkey.com). Invitati
 The invitations were sent out to a total of $`r nrow(invitation_timing)`$ authors, and $`r nrow(d)`$ responded (corresponding to a non-response rate of $`r round(100*nrow(d)/nrow(invitation_timing))`$\%).
 Figure 1 shows the numbers of invitations and responses by the date of the author's last publication.
 Participants filled in a questionnaire consisting of 15 multiple-choice questions regarding their attitudes, concerns and experiences with data archiving and sharing.
-
-```{r responseRates, cache=FALSE, message=FALSE, echo=FALSE, fig.width=5, fig.height=3, anchor="figure", fig.cap="Number of invitations and responses by quarter."}
-
-library(ggplot2)
-library(dplyr)
-library(zoo)
-library(parsedate)
-
-n_by_publication_date <- ddply(d, .(Date=as.character(PublicationDate_YQ)), function(x) c(N=nrow(x))) %>% cbind(., type="Responses")
-n_invitations_by_publication$Date <- as.character(n_invitations_by_publication$Date)
-n_by_publication_date <- n_by_publication_date %>% rbind( cbind(n_invitations_by_publication, type="Invitations"), .)
-
-p_by_publication_date <- n_by_publication_date %>% ggplot(aes(Date, N, fill=type, alpha=type, group=type)) + 
-              ylab("Number of invitations and responses")+xlab("Date of Publication")+geom_bar(stat="identity", position="dodge") +
-              scale_fill_manual(values=c("blue", "blue"))+scale_alpha_manual(values=c(.5, 1))+theme_bw() + 
-              theme(axis.title.y=element_text(size=rel(0.8)), axis.title.x=element_text(size=rel(0.8)), axis.text.x=element_text(angle=90,hjust=1), legend.title=element_blank())
-
-print(p_by_publication_date)
-```
-
-<!-- TODO: how were the responses spread out over journal types? when was the JDAP introduced when it was introduced, mean and SD? -->
 
 
 ## Results
