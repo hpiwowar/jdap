@@ -2,22 +2,22 @@
 title: "Data Archiving Attitudes"
 author: "Heather A. Piwowar, Todd J. Vision"
 date: "March 20, 2018"
-csl: f1000-research.csl
 output:
+  md_document:
+    variant: markdown_github
   html_document:
     css: style.css
     fig_caption: yes
     keep_md: yes
     number_sections: yes
     toc: yes
-  md_document:
-    variant: markdown_github
   pdf_document:
     fig_caption: yes
     number_sections: yes
     toc: yes
   word_document:
     fig_caption: yes
+csl: f1000-research.csl
 bibliography: input_references.bib
 ---
 
