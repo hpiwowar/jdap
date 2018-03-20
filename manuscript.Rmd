@@ -279,6 +279,7 @@ n_invitations_by_sent_month <- ddply(invitation_timing, .(Date=as.yearmon(sent_d
 # unique(d$PolicyAdoptedAtPublication)
 # d$label_PolicyAdoptedAtPublication <- ordered(d$PolicyAdoptedAtPublication, levels=c("No\nJDAP", "Before\nJDAP", "After\nJDAP"))
 d$label_PolicyAdoptedAtPublication <- ordered(gsub(" ","\n",d$PolicyAdoptedAtPublication), levels=gsub(" ","\n",levels_TimeClass))
+d$label_PolicyAdoptedAtPublication_space <- ordered(gsub(" "," ",d$PolicyAdoptedAtPublication), levels=gsub(" "," ", levels_TimeClass))
 
 # Note: These are very surprising responses
 # d_unexpected_responses <- subset(d, label_PolicyAdoptedAtPublication==levels_TimeClassByYear[4]) %>% subset(Q_9 == "Strongly Agree")
@@ -312,6 +313,7 @@ The following plots show the responses regarding the attitudes towards data shar
 
 ```{r, fig.width=10, fig.height=5, echo=FALSE}
 
+library(dplyr)
 library(ggplot2)
 library(reshape2)
 source("./src/aux_functions.R")
@@ -516,7 +518,7 @@ source("./src/plotLikert.R")
 responses <- c( "Many times","A few times","Once","Never") # response categories from top to bottom
 tmp <- melt(d, measure.vars=paste0('Q_4_',1:16 ))
 tmp$variable <- letters[gsub("Q_", "", tmp$variable) %>% gsub("4_", "", .) %>% as.integer]
-p <- plot_likert(tmp, response='value', var_x='PolicyAdoptedAtPublication', var_facet="variable", response_order=responses, above_mid="Once", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication_space', var_facet="variable", response_order=responses, above_mid="Once", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
 p <- p + theme(axis.text.x=element_text(angle=-90, size=8))
 
 print(p)
@@ -537,7 +539,7 @@ d_with_data <- subset(d, Q_3 %in% responses_have_data)
 responses <- c( "Many times","A few times","Once","Never") # response categories from top to bottom
 tmp <- melt(d_with_data, measure.vars=paste0('Q_4_',1:16 ))
 tmp$variable <- letters[gsub("Q_", "", tmp$variable) %>% gsub("4_", "", .) %>% as.integer]
-p <- plot_likert(tmp, response='value', var_x='PolicyAdoptedAtPublication', var_facet="variable", response_order=responses, above_mid="Once", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication_space', var_facet="variable", response_order=responses, above_mid="Once", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
 p <- p + theme(axis.text.x=element_text(angle=-90, size=8))
 
 print(p)
@@ -560,7 +562,7 @@ d_with_no_data <- subset(d, Q_3 %in% responses_have_no_data)
 responses <- c( "Many times","A few times","Once","Never") # response categories from top to bottom
 tmp <- melt(d_with_data, measure.vars=paste0('Q_4_',1:16 ))
 tmp$variable <- letters[gsub("Q_", "", tmp$variable) %>% gsub("4_", "", .) %>% as.integer]
-p <- plot_likert(tmp, response='value', var_x='PolicyAdoptedAtPublication', var_facet="variable", response_order=responses, above_mid="Once", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication_space', var_facet="variable", response_order=responses, above_mid="Once", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
 p <- p + theme(axis.text.x=element_text(angle=-90, size=8))
 
 print(p)
@@ -655,7 +657,8 @@ cur_d$value <- ordered(cur_d$value, levels=levels)
 
 tmp <- group_by(cur_d, PolicyAdoptedAtPublication, label_PolicyAdoptedAtPublication, value) %>% dplyr::summarize(N=length(value))  %>% dplyr::mutate(N.total=sum(N), class.Proportion=N/N.total)
 
-p <- ggplot(tmp, aes(label_PolicyAdoptedAtPublication, class.Proportion*100, group=value, fill=value))+geom_bar(stat="identity", position="dodge")+xlab("JDAP Policy")+ylab("Proportion of responses (in %)")
+p <- ggplot(tmp, aes(x = label_PolicyAdoptedAtPublication, y = 100*class.Proportion, fill = value)) + geom_bar(stat = "identity")+xlab("JDAP Policy")+ylab("Proportion of responses (in %)")
+
 p + theme_bw()
 
 ```
@@ -699,7 +702,8 @@ cur_d$value <- ordered(cur_d$value, levels=levels)
 
 tmp <- group_by(cur_d, PolicyAdoptedAtPublication, label_PolicyAdoptedAtPublication, value) %>% dplyr::summarize(N=length(value))  %>% dplyr::mutate(N.total=sum(N), class.Proportion=N/N.total)
 
-p <- ggplot(tmp, aes(label_PolicyAdoptedAtPublication, class.Proportion*100, group=value, fill=value))+geom_bar(stat="identity", position="dodge")+xlab("JDAP Policy")+ylab("Proportion of responses (in %)")
+p <- ggplot(tmp, aes(x = label_PolicyAdoptedAtPublication, y = 100*class.Proportion, fill = value)) + geom_bar(stat = "identity")+xlab("JDAP Policy")+ylab("Proportion of responses (in %)")
+
 p + theme_bw()
 
 ```
@@ -730,7 +734,7 @@ responses_agree_disagree <- c("Strongly Agree","Agree","Somewhat Agree","Somewha
 
 tmp <- melt(d, measure.vars=c('Q_9'))
 tmp$variable <- gsub("Q_", "Question ", tmp$variable)
-p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication', var_facet="variable", response_order=responses_agree_disagree, above_mid="Somewhat Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy")
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication_space', var_facet="variable", response_order=responses_agree_disagree, above_mid="Somewhat Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy")
   
 print(p)
 
@@ -763,7 +767,7 @@ source("./src/plotLikert.R")
 responses <- c("Strongly Agree","Strongly Disagree") # response categories from top to bottom
 tmp <- melt(d, measure.vars=paste0('Q_10_',1:11 ))
 tmp$variable <- letters[gsub("Q_", "", tmp$variable) %>% gsub("10_", "", .) %>% as.integer]
-p <- plot_likert(tmp, response='value', var_x='PolicyAdoptedAtPublication', var_facet="variable", response_order=responses, above_mid="Strongly Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication_space', var_facet="variable", response_order=responses, above_mid="Strongly Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
 p <- p + theme(axis.text.x=element_text(angle=-90, size=8))
 
 print(p)
@@ -796,7 +800,7 @@ responses <- c("Strongly Agree","Strongly Disagree") # response categories from 
 tmp <- melt(d, measure.vars=paste0('Q_11_',1:10 ))
 
 tmp$variable <- letters[gsub("Q_", "", tmp$variable) %>% gsub("11_", "", .) %>% as.integer]
-p <- plot_likert(tmp, response='value', var_x='PolicyAdoptedAtPublication', var_facet="variable", response_order=responses, above_mid="Strongly Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
+p <- plot_likert(tmp, response='value', var_x='label_PolicyAdoptedAtPublication_space', var_facet="variable", response_order=responses, above_mid="Strongly Agree", na.label="No response", xlab="% Responses", ylab="JDAP Policy", include.N=FALSE)
 p <- p + theme(axis.text.x=element_text(angle=-90, size=8))
 
 print(p)
