@@ -156,8 +156,8 @@ d <- select(d, ResponseID, ResponseDate, PublicationDate, Journal=journal, Q_1=Q
 d <- rename(d, Q_4_15_TEXT=Q_4_16, Q_4_16=Q_4_17, Q_6_6_TEXT=Q_6_7, Q_7_5_TEXT=Q_7_6, Q_7_6=Q_7_7, Q_8_8_TEXT=Q_8_9, 
             Q_8_9=Q_8_10, Q_8_10=Q_8_11, Q_10_12_TEXT=Q_10_13, Q_11_11_TEXT=Q_11_12 )
 
-save(d, file="../JDAP_Survey_Data_Tidy.rda")
-write.csv(d, file="../JDAP_Survey_Data_Tidy.csv")
+save(d, file="../derived/JDAP_Survey_Data_Tidy.rda")
+write.csv(d, file="../derived/JDAP_Survey_Data_Tidy.csv")
 
 
 

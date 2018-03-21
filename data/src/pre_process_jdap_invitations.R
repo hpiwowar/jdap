@@ -15,6 +15,6 @@ d$journal[d$journal=="unknown"] <- NA
 unique(d$note)
 d$note <- NULL
 
-write.table(d, file="../Invitations_Timing.csv")
+write.table(d, file="../derived/Invitations_Timing.csv")
 invitation_timing <- d
-save(invitation_timing, file="../Invitations_Timing.rda")
+save(invitation_timing, file="../derived/Invitations_Timing.rda")

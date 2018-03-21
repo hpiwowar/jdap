@@ -1,23 +1,23 @@
 ---
-title: "Data Archiving Attitudes"
+title: Impact of journal data archiving mandates on author attitudes, experiences,
+  and practices
 author: "Heather A. Piwowar, Todd J. Vision"
-date: "March 20, 2018"
+csl: peerj.csl
 output:
+  md_document:
+    variant: markdown_github
   html_document:
     css: style.css
     fig_caption: yes
     keep_md: yes
     number_sections: yes
     toc: yes
-  md_document:
-    variant: markdown_github
   pdf_document:
     fig_caption: yes
     number_sections: yes
     toc: yes
   word_document:
     fig_caption: yes
-csl: peerj.csl
 bibliography: input_references.bib
 ---
 
@@ -195,9 +195,72 @@ d$label_PolicyAdoptedAtPublication_space <- ordered(gsub(" "," ",d$PolicyAdopted
 
 ```
 
-[TODO: LIST THE JOURNALS IN CONTROL AND JDAP ARMS]
-
 The invitations were sent out monthly between February 2011 and March 2014 to a total of $`r nrow(invitation_timing)`$ authors, and $`r nrow(d)`$ responded (corresponding to a response rate of $`r round(100*nrow(d)/nrow(invitation_timing))`$\%).
+
+|position	| number of responses	| proprotion of responses |
+| ---       | ---           | --- |
+|postdoc|	        1049|	0.254|
+|tenured faculty|	986|	0.239|
+|(blank)|	        696|	0.169|
+|research staff|	470|   	0.114|
+|non-tenured faculty|	463|	0.112|
+|student|	        343|	0.083|
+|Other (please specify)|	117|	0.028|
+|Grand Total|	4124|	1|
+
+Journal policies as of December 2014:
+
+|journal	| policy start	| number of responses |
+| ---       | ---           | --- |
+|American Naturalist|2011-01-01|115|
+|Animal Behaviour||129|
+|Behavioral Ecology||62|
+|Behavioral Ecology and Sociobiology||78|
+|Biological Conservation||134|
+|Biological Journal of the Linnean Society|2011-09-03|102|
+|Biology Letters|2014-10-29|80|
+|BMC Biology|2014-08-19|22|
+|BMC Evolutionary Biology||102|
+|BMC Plant Biology||53|
+|Conservation Biology||71|
+|Conservation genetics||64|
+|Ecological Applications|2014-01-01|115|
+|Ecological Monographs|2011-01-01|25|
+|Ecology||156|
+|Evolution|2011-01-01|115|
+|Evolutionary Applications|2011-01-01|22|
+|Evolutionary Ecology||38|
+|FASEB Journal||143|
+|FEBBS Letters||113|
+|Functional Ecology|2012-12-05|59|
+|GENETICS|2010-01-01|95|
+|Genome research|2008-07-06|70|
+|Global Change Biology||124|
+|Heredity|2011-03-01|42|
+|ISME Journal||66|
+|Journal of Animal Ecology|2012-12-01|68|
+|Journal of Biogeography||70|
+|Journal of Ecology|2013-06-03|74|
+|Journal of Evolutionary Biology|2011-10-24|96|
+|Journal of Experimental Biology||179|
+|Journal of Experimental Botany||123|
+|Journal of Heredity|2013-01-01|32|
+|Journal of Molecular Evolution||23|
+|Journal of Paleontology||34|
+|Molecular Biology and Evolution|2010-12-31|104|
+|Molecular Ecology|2011-01-01|154|
+|Molecular Phylogenetics and Evolution||83|
+|Nature structural & molecular biology||50|
+|New Phytologist|2010-11-23|80|
+|Oecologia||151|
+|Oikos|2014-03-06|118|
+|Paleobiology||2|
+|Physiological Genomics||38|
+|PLoS Biology|2014-11-14|82|
+|Proceedings of the Royal Society B: Biological Sciences|2013-03-20|217|
+|Systematic Biology|2010-12-31|26|
+|The Plant Journal|2010-08-18|102|
+
 
 
 ## Primary analysis
@@ -644,6 +707,18 @@ print(p)
 
 ```
 
+### Free text comments
+
+There were 356 free text comments. A few representative ones:
+
+- You may wish to consider fields of research. In ecology I guard my data; for evolutionary studies I use online data. The fields have very different attitudes and approaches.
+- In ecology, we often spend years collecting datasets that are unique.  That effort, combined with the set of ideas that led to collection of the data, should convey a large degree of 'ownership'.  
+- Thanks for researching this question.  I cannot share my data...  unless someone directly requests it and guarantees shared authorship of the product.  We invested tremendous amounts of money and personal effort in collecting and grooming these data, so we need to work through all the associated papers before others have a chance.
+- I think you could have more comments related to how cumbersome, time-consuming, and expensive this new requirement is to most researchers.
+- Putting the data into an archive will produce additional costs. How is going to pay for it? At the moment, we are rquested to keep the data for at least 10 years, and share them with colleagues upon request. This has worked so far, and I think we should leave it at that and not use up extra money that could be better used for funding science. 
+- Science is about sharing ideas and data. If we don't do this it is not science. It's pretty simple. The only question is which datasets is it worth investing effort into sharing at what level of detail and standards. This is tricky to get the balance right but this debate should not negate the premise that we're about data sharing.
+- I personally find submitting your own data a bit tedious, and I would always be worried that someone would use arcane statistical models to contradict something I found, but in the end transparency is an important feature of science and it's ridiculous that we don't have to show our data.  It is absolutely the right thing to do.
+
 
 
 # Discussion
@@ -651,7 +726,6 @@ print(p)
 What has happened since
 
 some more: `r citep(c(
-bib["2015thank-y"],
 bib["anagnostou2015when-da"],
 bib["nosek2015scienti"],
 bib["stodden2018an-empi"],
@@ -712,11 +786,12 @@ Did JDAP-adopting journals start being more eagerly adopted by people who like d
 - Survey questions
 - Instructions to authors
 - Contact corresponding code
-- Comparison journals spreadsheet
 - R files
 - Raw data
 
 # Acknowlegements
+
+Everyone who took the survey.
 
 
 # Funding
@@ -735,11 +810,10 @@ library(knitr)
 journals_in_dataset <- unique(d$Journal)
 relevant_jdap_adoption_dates <- subset(jdap_adoption_dates, Journal %in% journals_in_dataset)
 
-table <- subset(relevant_jdap_adoption_dates, policy == "Required")[,c('JournalName','policy_start_str')]
-colnames(table) <- c('Journal', 'Adoption Date of JDAP or Equivalent Policy')
+table <- relevant_jdap_adoption_dates[,c('JournalName', 'policy', 'policy_start')]
+colnames(table) <- c('Journal', 'Policy', 'Adoption Date of JDAP or Equivalent Policy')
 rownames(table) <- NULL
-kable(table)
-
+# kable(table)
 ```
 
 # Bibliolography
