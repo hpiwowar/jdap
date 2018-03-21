@@ -1,5 +1,5 @@
 ---
-title: Impact of journal data archiving mandates on author attitudes, experiences,
+title: Influence of journal data archiving mandates on author attitudes, experiences,
   and practices
 author: "Heather A. Piwowar, Todd J. Vision"
 csl: peerj.csl
@@ -208,7 +208,7 @@ The invitations were sent out monthly between February 2011 and March 2014 to a 
 |Other (please specify)|	117|	0.028|
 |Grand Total|	4124|	1|
 
-Journal policies as of December 2014:
+Journal policies as of December 2014 (surveys were sent out between February 2011 and March 2014 to authors who published between November 2010 and November 2013):
 
 |journal	| policy start	| number of responses |
 | ---       | ---           | --- |
@@ -723,54 +723,33 @@ There were 356 free text comments. A few representative ones:
 
 # Discussion
 
-What has happened since
+data policies are becoming more prevalent: seven journals announced data archiving mandates during the course of the survey (and another three journals implemented policies shortly after the suvey completed).
 
-some more: `r citep(c(
-bib["anagnostou2015when-da"],
-bib["nosek2015scienti"],
-bib["stodden2018an-empi"],
-bib["budin-ljosne2014data-sh"],
-bib["hate2015sweat-s"],
-bib["naudet2018data-sh"],
-bib["curty2017attitud"],
-bib["linek2017data-sh"],
-bib["longo2016data-sh"],
-bib["berger2016iscbs-i"],
-bib["chigusa2017state-o"],
-bib["womack2015researc"],
-bib["doi:10.1002/asi.23917"],
-bib["plos-medicine-editors2016can-dat"],
-bib["van-tuyl2016water-w"],
-bib["vasilevsky2017reprodu"],
-bib["doi:10.1002/asi.23336"],
-bib["pearce2011data-sh"],
-bib["alsheikh-ali2011public-"],
-bib["vines2013mandate"],
-bib["roche2014trouble"],
-bib["roche2015public-"],
-bib["lin2014recomme"],
-bib["whitlock2016a-balan"],
-bib["naughton-l2016making-"],
-bib["teunis2015do-corr"],
-bib["fetterman2015the-rep"]
-))
-`
-
-Response to plos
-Future work
-With this dataset
-Advanced stats
-Longer term study
-More jdap journals come out
+even so, a minority of journal policies require data sharing `r citep(c(bib["vasilevsky2017reprodu"],bib["naughton-l2016making"]))`
 
 
-
-## Future work
-
-Did JDAP-adopting journals start being more eagerly adopted by people who like data archiving, or did the authors in JDAP journals change their minds?
+Even when there are journal policies, often not sufficient to achieve reproducability for the majority of studies `r citep(c(bib["roche2015public"], bib["stodden2018an-empi"], bib["naudet2018data-sh"]))`
 
 
-## Limitations
+suggesting author personality `r citep(c(bib["linek2017data-sh"]))` or social norms `r citep(c(bib["anagnostou2015when-da"], bib["womack2015researc"]))` may play a larger factor than journal policy.
+
+Findings here are consistent with other findings that authors more likely to share data if they had prior experience sharing or reusing data
+`r citep(c(bib["Piwowar_2011"]))`.
+
+Could be helpful for journals to help spread the word about worries that are unfounded.  For example, authors are worried about scooping, but it rarely happens -- almost all of an author's papers about one of their own datasets occur within two years of its collection, whereas third-party papers are still accumulating six years later `r citep(c(bib["piwowar2013data-re"]))`.  In areas where this is less true, journal policies could be modified to support it `r citep(c(bib["whitlock2016a-balan"], bib["doi:10.1002/asi.23336"]))`
+
+Similarily, although of course data archiving has a cost, it also has a good return on investment in terms of research output `r citep(c(bib["piwowar2011data-ar"]))`. 
+
+The longitudinal study nature of this study is useful -- comparing across journals is frought, as stronger data archiving policies are disproportionately found in higher impact journals `r citep(c(bib["vasilevsky2017reprodu"], bib["piwowar2008a-revie"]))`.
+
+cite this? `r citep(c(bib["van-tuyl2016water-w"]))`. 
+also maybe this?  `r citep(c(bib["fetterman2015the-rep"]))`. 
+
+
+still pulling these in to discussion notes `r citep(c(bib["budin-ljosne2014data-sh"],bib["lin2014recomme"],bib["roche2014trouble"],bib["vines2013mandate"],bib["pearce2011data-sh"],bib["alsheikh-ali2011public"]))`
+
+
+Limitations of this study include:
 
 - This study makes no attempt to understand the rigor with which data sharing is encouraged in journals beyond their written policies:  many journals without policies nonetheless expect data sharing and many with written policies fail to enforce them.
 - The opinions of corresponding authors with respect to data sharing may not be typical of all authors:  a future study could be done to quantify this.
@@ -782,12 +761,14 @@ Did JDAP-adopting journals start being more eagerly adopted by people who like d
 
 # Data availability
 
-- IRB
-- Survey questions
-- Instructions to authors
-- Contact corresponding code
-- R files
-- Raw data
+- IRB (now in dropbox)
+- Recruitment emails (now in dropbox)
+- Journal policies (instructions to authors as of January 29, 2011): zip of html (now in dropbox)
+- Survey questions (now in dropbox)
+- [Survey responses](https://github.com/hpiwowar/jdap/blob/master/data/raw_data/JDAP_Survey_Data.csv)
+- [Full text comments](https://github.com/hpiwowar/jdap/blob/master/data/full_text_comments.txt)
+- [Contact corresponding authors scripts](https://github.com/hpiwowar/contact_corresponding)
+- [Manuscript R files](https://github.com/hpiwowar/jdap)
 
 # Acknowlegements
 
@@ -799,12 +780,9 @@ Everyone who took the survey.
 Heather's postdoc funding.
 
 
-
-# Appendix: JDAP Adoption Dates
-
-
-
 ```{r, fig.width=7, fig.height=5, echo=FALSE}
+# JDAP Adoption Dates
+
 library(knitr)
 
 journals_in_dataset <- unique(d$Journal)

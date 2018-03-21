@@ -119,7 +119,7 @@ The invitations were sent out monthly between February 2011 and March 2014 to a 
 | Other (please specify) | 117                 | 0.028                   |
 | Grand Total            | 4124                | 1                       |
 
-Journal policies as of December 2014:
+Journal policies as of December 2014 (surveys were sent out between February 2011 and March 2014 to authors who published between November 2010 and November 2013):
 
 | journal                                                 | policy start | number of responses |
 |---------------------------------------------------------|--------------|---------------------|
@@ -343,19 +343,27 @@ There were 356 free text comments. A few representative ones:
 Discussion
 ==========
 
-What has happened since
+data policies are becoming more prevalent: seven journals announced data archiving mandates during the course of the survey (and another three journals implemented policies shortly after the suvey completed).
 
-some more: (<span class="citeproc-not-found" data-reference-id="alsheikh-ali2011public">**???**</span>-, <span class="citeproc-no-output">**???**</span>-, <span class="citeproc-no-output">**???**</span>-; Pearce & Smith, 2011; Vines et al., 2013; Budin-Ljøsne et al., 2014; Lin & Strasser, 2014; Roche et al., 2014; Anagnostou et al., 2015; Fetterman & Sassenberg, 2015; Hate et al., 2015; Nosek et al., 2015; Sturges et al., 2015; Teunis, Nota, & Schwab, 2015; Womack, 2015; Berger et al., 2016; Longo & Drazen, 2016; PLOS Medicine Editors, 2016; Van Tuyl & Whitmire, 2016; Whitlock et al., 2016; Chigusa, Moroi, & Shoji, 2017; Curty et al., 2017; Linek et al., 2017; Silvello, 2017; Vasilevsky et al., 2017; Naudet et al., 2018; Stodden, Seiler, & Ma, 2018)
+even so, a minority of journal policies require data sharing (Naughton L, 2016; Vasilevsky et al., 2017)
 
-Response to plos Future work With this dataset Advanced stats Longer term study More jdap journals come out
+Even when there are journal policies, often not sufficient to achieve reproducability for the majority of studies (Roche et al., 2015; Naudet et al., 2018; Stodden, Seiler, & Ma, 2018)
 
-Future work
------------
+suggesting author personality (Linek et al., 2017) or social norms (Anagnostou et al., 2015; Womack, 2015) may play a larger factor than journal policy.
 
-Did JDAP-adopting journals start being more eagerly adopted by people who like data archiving, or did the authors in JDAP journals change their minds?
+Findings here are consistent with other findings that authors more likely to share data if they had prior experience sharing or reusing data (Piwowar, 2011).
 
-Limitations
------------
+Could be helpful for journals to help spread the word about worries that are unfounded. For example, authors are worried about scooping, but it rarely happens -- almost all of an author's papers about one of their own datasets occur within two years of its collection, whereas third-party papers are still accumulating six years later (H. A. Piwowar & Vision, 2013). In areas where this is less true, journal policies could be modified to support it (Sturges et al., 2015; Whitlock et al., 2016)
+
+Similarily, although of course data archiving has a cost, it also has a good return on investment in terms of research output (H. A. Piwowar, Vision, & Whitlock, 2011).
+
+The longitudinal study nature of this study is useful -- comparing across journals is frought, as stronger data archiving policies are disproportionately found in higher impact journals (HA Piwowar & Chapman, 2008; Vasilevsky et al., 2017).
+
+cite this? (Van Tuyl & Whitmire, 2016). also maybe this? (Fetterman & Sassenberg, 2015).
+
+still pulling these in to discussion notes (Alsheikh-Ali et al., 2011; Pearce & Smith, 2011; Vines et al., 2013; Budin-Ljøsne et al., 2014; Lin & Strasser, 2014; Roche et al., 2014)
+
+Limitations of this study include:
 
 -   This study makes no attempt to understand the rigor with which data sharing is encouraged in journals beyond their written policies: many journals without policies nonetheless expect data sharing and many with written policies fail to enforce them.
 -   The opinions of corresponding authors with respect to data sharing may not be typical of all authors: a future study could be done to quantify this.
@@ -367,12 +375,14 @@ Limitations
 Data availability
 =================
 
--   IRB
--   Survey questions
--   Instructions to authors
--   Contact corresponding code
--   R files
--   Raw data
+-   IRB (now in dropbox)
+-   Recruitment emails (now in dropbox)
+-   Journal policies (instructions to authors as of January 29, 2011): zip of html (now in dropbox)
+-   Survey questions (now in dropbox)
+-   [Survey responses](https://github.com/hpiwowar/jdap/blob/master/data/raw_data/JDAP_Survey_Data.csv)
+-   [Full text comments](https://github.com/hpiwowar/jdap/blob/master/data/full_text_comments.txt)
+-   [Contact corresponding authors scripts](https://github.com/hpiwowar/contact_corresponding)
+-   [Manuscript R files](https://github.com/hpiwowar/jdap)
 
 Acknowlegements
 ===============
@@ -384,19 +394,16 @@ Funding
 
 Heather's postdoc funding.
 
-Appendix: JDAP Adoption Dates
-=============================
-
 Bibliolography
 ==============
 
 Abadie, A., Diamond, A., & Hainmueller, J. 2010. *Synthetic Control Methods for Comparative Case Studies: Estimating the Effect of California’s Tobacco Control Program*. Journal of the American Statistical Association 105(490):493–505.
 
+Alsheikh-Ali, A. A., Qureshi, W., Al-Mallah, M. H., & Ioannidis, J. P. A. 2011. *Public availability of published research data in high-impact journals*. PLoS One 6(9):e24357.
+
 Anagnostou, P., Capocasa, M., Milia, N., Sanna, E., Battaggia, C., Luzi, D., & Destro Bisol, G. 2015. *When data sharing gets close to 100%: What human paleogenetics can teach the open science movement*. PLoS One 10(3):e0121409.
 
 Beagrie, N., Eakin-Richards, L., & Vision, T. 2009. *Business models and cost estimation: Dryad repository case study*. Journal Unknown (1).
-
-Berger, B., Gaasterland, T., Lengauer, T., Orengo, C., Gaeta, B., Markel, S., & Valencia, A. 2016. *ISCB’s initial reaction to the new england journal of medicine editorial on data sharing*. PLoS Comput Biol 12(3):e1004816.
 
 Björk, B., & Öörni, A. 2009. *A Method for Comparing Scholarly Journals as Service Providers to Authors*. Serials Review 35(2):62–69.
 
@@ -404,7 +411,7 @@ Blumenthal, D., Campbell, E., Anderson, M., Causino, N., & Louis, K. 1997. *With
 
 Blumenthal, D., Campbell, E., Gokhale, M., Yucel, R., Clarridge, B., Hilgartner, S., & Holtzman, N. 2006. *Data withholding in genetics and the other life sciences: prevalences and predictors*. Acad Med 81(2):137–145.
 
-Brown, C. 2003. *The changing face of scientific discourse: Analysis of genomic and proteomic database usage and …*. Journal of the American Society for Information Science and …. Journal article.
+Brown, C. 2003. *The changing face of scientific discourse: Analysis of genomic and proteomic database usage and acceptance*. Journal of the American Society for Information Science and Technology.
 
 Budin-Ljøsne, I., Isaeva, J., Knoppers, B. M., Tassé, A. M., Shen, H.-y., McCarthy, M. I., Harris, J. R., & ENGAGE Consortium. 2014. *Data sharing in large research consortia: Experiences and recommendations from engage*. Eur J Hum Genet 22(3):317–21.
 
@@ -413,10 +420,6 @@ Campbell, E. G., & Bendavid, E. 2002. *Data-sharing and data-withholding in gene
 Campbell, E., Clarridge, B., Gokhale, M., Birenbaum, L., Hilgartner, S., Holtzman, N., & Blumenthal, D. 2002. *Data withholding in academic genetics: evidence from a national survey*. JAMA 287(4):473–480. Journal article.
 
 Campbell, P. 2008. *What are the ethical and social responsibilities of scientists?* Nature Precedings.
-
-Chigusa, S., Moroi, T., & Shoji, Y. 2017. *State-of-the-art calculation of the decay rate of electroweak vacuum in the standard model*. Phys Rev Lett 119(21):211801.
-
-Curty, R. G., Crowston, K., Specht, A., Grant, B. W., & Dalton, E. D. 2017. *Attitudes and norms affecting scientists’ data reuse*. PLoS One 12(12):e0189288.
 
 Enriquez, V., Judson, S. W., Weber, N. M., Allard, S., Cook, R. B., Piwowar, H. A., Sandusky, R. J., Vision, T. J., & Wilson, B. 2010. *Data citation in the wild*. Unknown journal.
 
@@ -432,8 +435,6 @@ Haas, M. R., & Park, S. 2009. *To Share or Not to Share? Professional Norms, Ref
 
 Haeussler, C., & München, L.-m.-u. 2011. *Information-Sharing in Academia and the Industry: A Comparative Study*. Research Policy 0–53.
 
-Hate, K., Meherally, S., Shah More, N., Jayaraman, A., Bull, S., Parker, M., & Osrin, D. 2015. *Sweat, skepticism, and uncharted territory: A qualitative study of opinions on data sharing among public health researchers and research participants in mumbai, india*. J Empir Res Hum Res Ethics 10(3):239–50.
-
 Hedstrom, M., & Niu, J. 2008. *Research Forum Presentation: Incentives to Create “Archive-Ready” Data: Implications for Archives and Records Management*. Society of American Archivists Annual Meeting. Journal article.
 
 King, G. 1995. *A Revised Proposal, Proposal*. PS: Political Science and Politics XXVIII(3):443–499.
@@ -444,15 +445,13 @@ Lin, J., & Strasser, C. 2014. *Recommendations for the role of publishers in acc
 
 Linek, S. B., Fecher, B., Friesike, S., & Hebing, M. 2017. *Data sharing as social dilemma: Influence of the researcher’s personality*. PLoS One 12(8):e0183216.
 
-Longo, D. L., & Drazen, J. M. 2016. *Data sharing*. N Engl J Med 374(3):276–7.
-
 McCain, K. 1995. *Mandating Sharing: Journal Policies in the Natural Sciences*. Science Communication 16(4):403–431. Journal article.
 
 Naudet, F., Sakarovitch, C., Janiaud, P., Cristea, I., Fanelli, D., Moher, D., & Ioannidis, J. P. A. 2018. *Data sharing and reanalysis of randomized controlled trials in leading biomedical journals with a full data sharing policy: Survey of studies published inThe bmjandplos medicine*. BMJ 360:k400.
 
-Noor, M., Zimmerman, K., & Teeter, K. 2006. *Data Sharing: How Much Doesn’t Get Submitted to GenBank?* PLoS Biol 4(7).
+Naughton L, K. D. 2016. *Making sense of journal research data policies*. Insights 29(1):84–9.
 
-Nosek, B. A., Alter, G., Banks, G. C., Borsboom, D., Bowman, S. D., Breckler, S. J., Buck, S., Chambers, C. D., Chin, G., Christensen, G., et al. 2015. *SCIENTIFIC standards. promoting an open research culture*. Science 348(6242):1422–5.
+Noor, M., Zimmerman, K., & Teeter, K. 2006. *Data Sharing: How Much Doesn’t Get Submitted to GenBank?* PLoS Biol 4(7).
 
 Ochsner, S., Steffen, D., Stoeckert, C., & McKenna, N. 2008. *Much room for improvement in deposition rates of expression microarray datasets*. Nature Methods 5(12). Journal article.
 
@@ -460,15 +459,19 @@ Pearce, N., & Smith, A. H. 2011. *Data sharing: Not as simple as it seems*. Envi
 
 Piwowar, H. A. 2011. *Who shares? Who doesn’t? Factors associated with openly archiving raw research data*. (C. Neylon, Ed.)PLoS ONE 6(7):e18657.
 
+Piwowar, H. A., & Vision, T. J. 2013. *Data reuse and the open data citation advantage*. PeerJ 1:e175.
+
+Piwowar, H. A., Vision, T. J., & Whitlock, M. C. 2011. *Data archiving is a good investment*. Nature 473(7347):285.
+
 Piwowar, H., & Chapman, W. 2008. *A review of journal policies for sharing research data*. ELPUB. Journal article.
 
 Piwowar, H., Day, R., & Fridsma, D. 2007. *Sharing detailed research data is associated with increased citation rate*. PLoS ONE 2(3). Journal article.
 
 Plint, A., Moher, D., Morrison, A., Schulz, K., Altman, D., Hill, C., & Gaboury, I. 2006. *Does the CONSORT checklist improve the quality of reports of randomised controlled trials? A systematic review*. The Medical journal of Australia 185(5):263–7. Journal article.
 
-PLOS Medicine Editors. 2016. *Can data sharing become the path of least resistance?* PLoS Med 13(1):e1001949.
-
 Reidpath, D., & Allotey, P. 2001. *Data sharing in medical research: an empirical investigation*. Bioethics 15(2):125–134.
+
+Roche, D. G., Kruuk, L. E. B., Lanfear, R., & Binning, S. A. 2015. *Public data archiving in ecology and evolution: How well are we doing?* PLoS Biol 13(11):e1002295.
 
 Roche, D. G., Lanfear, R., Binning, S. A., Haff, T. M., Schwanz, L. E., Cain, K. E., Kokko, H., Jennions, M. D., & Kruuk, L. E. B. 2014. *Troubleshooting public data archiving: Suggestions to increase participation*. PLoS Biol 12(1):e1001779.
 
@@ -476,13 +479,9 @@ Savage, C. J., & Vickers, A. J. 2009. *Empirical study of data sharing by author
 
 Scherle, R., Carrier, S., Greenberg, J., Lapp, H., Thompson, A., Vision, T., & White, H. 2008. *Building Support for a Discipline-Based Data Repository*. poster presented at the Third International Conference on Open Repositories 1–4.
 
-Silvello, G. 2017. *Theory and practice of data citation*. Journal of the Association for Information Science and Technology 69(1):6–20.
-
 Stodden, V., Seiler, J., & Ma, Z. 2018. *An empirical analysis of journal policy effectiveness for computational reproducibility*. Proc Natl Acad Sci U S A 115(11):2584–2589.
 
 Sturges, P., Bamkin, M., Anders, J. H., Hubbard, B., Hussain, A., & Heeley, M. 2015. *Research data sharing: Developing a stakeholder‐driven model for journal policies*. Journal of the Association for Information Science and Technology 66(12):2445–2455.
-
-Teunis, T., Nota, S. P. F. T., & Schwab, J. H. 2015. *Do corresponding authors take responsibility for their work? A covert survey*. Clin Orthop Relat Res 473(2):729–35.
 
 Van Tuyl, S., & Whitmire, A. L. 2016. *Water, water, everywhere: Defining and assessing data sharing in academia*. PLoS One 11(2):e0147942.
 
