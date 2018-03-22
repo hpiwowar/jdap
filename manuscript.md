@@ -6,14 +6,11 @@ Introduction
 
 There have been previous studies of data sharing patterns, but we are not aware of any prior research that examined attitudes and experiences of authors before and after policy implementation.
 
-The promise of data sharing
----------------------------
+Data archiving policies
+-----------------------
 
 Sharing data is a tenet of science, yet commonplace in only a few subdisciplines. Publicly available datasets have many potential reuses. Unfortunately, these advantages only indirectly benefit the stakeholders who bear most of the costs for sharing their datasets: the primary data-producing investigators. As a result, authors often actively or passively withhold their research datasets from other investigators
 (Blumenthal et al., 1997; Ochsner et al., 2008; Savage & Vickers, 2009).
-
-Data archiving journal policies
--------------------------------
 
 Recognizing that a data sharing culture is unlikely to be achieved without policy guidance, funders and journals have begun to request and require that investigators share their research datasets with other researchers (Brown, 2003; Enriquez et al., 2010). Funders are motivated by the promise of resource efficiency and rapid progress. The motivation for journals to act as an advocate and gatekeeper for data sharing is less straightforward. Journals seek to publish “well-written, properly formatted research that meets community standards” and in so doing have assumed monitoring tasks to “remind researchers of community expectations and enforce some behaviors seen as advantageous to the progress of science” (McCain, 1995). This role has been encouraged by many letters, white-papers, and editorials in high-profile journals.
 
@@ -93,12 +90,18 @@ Recruitment email lists were compared across months, and emails only sent to tho
 
 The online survey was administered through Qualtrics, hosted by the University of North Carolina. The online questionnaire took about 10 minutes to complete.
 
-Analysis
---------
+Analysis approach
+-----------------
 
-The responses of authors who published in JDAP-adopting journals were compared, over time, to the responses of authors who published in similar journals that did not adopt JDAP.
+The primary analysis will be based on responses to be a seven-point Likert scale asking how strongly authors believe: “It is the community norm in my field to publicly share datasets upon study publication by archiving all datasets online, for use by anyone for any purpose.” Our goal is to see if author's responses to this question were influenced by publishing in a journal that had implemented JDAP.
 
-The primary analysis will be a seven-point Likert scale asking how strongly authors believe: “It is the community norm in my field to publicly share datasets upon study publication by archiving all datasets online, for use by anyone for any purpose.” About twelve other survey questions will allow secondary and exploratory analyses.
+The potential effect of JDAP adoption on authors' attitudes is might be confounded by two other factors. First, groups of researchers publishing in journals which are not planning to adopt JDAP may inherently differ from groups publishing in journals which were open to adopting the JDAP. Second, attitudes regarding data archiving may improve over time for all authors, independent of journal or policy.
+
+In order to test the effect of policy change on attitudes while controlling for potential confounding effects, we used an ordinal logistic regression model with three predictors: (i) whether the jounal adopted JDAP *(cNonJDAPJournal)*, (ii) the date the authors published their paper *(cDate)*, and (iii) a variable indicating whether the article was published after the the journal adopted a data archiving policy *(cAfterPolicyChange)*. Confidence intervals were obtained by profile likelihood. If the confidence intervals do not contain 1 for the *(cAfterPolicyChange)* variable then the policy would have had an affect on attitudes, independent of publication date or whether the journal was the type to adopt a JDAP policy.
+
+We further tested the policy correlation by comparing the fit of two models, one model with all three of the above variables, and one model with two variables excluding the policy change predictor (*cAfterPolicyChange*). If, using a likelihood-ratio test, the full model was a statistically better fit than the model without the policy change variable, it would support the hypothesis that the differences in authors attitudes were related to the policy adoption.
+
+Twelve other survey questions allowed secondary and exploratory analyses.
 
 Results
 =======
@@ -184,19 +187,15 @@ The questions asked about the strength of agreement/disagreement with the follow
 
 ------------------------------------------------------------------------
 
-The following plots show the responses regarding the attitudes towards data sharing and archiving for participants who (i) published in journals which have note adopted the JDAP so far ('No JDAP'), (ii) published in journals which had not *yet* adopted the JDAP before publication ('Before JDAP'), and (iii) journals which had adopted the JDAP before publication ('After JDAP).
+The following plots show the responses regarding the attitudes towards data sharing and archiving for participants who (i) published in journals which have note adopted the JDAP so far ('No JDAP'), (ii) published in journals which had not *yet* adopted the JDAP before publication ('Before JDAP'), and (iii) journals which had adopted the JDAP after publication ('After JDAP).
 
 ![](manuscript_files/figure-markdown_github/unnamed-chunk-3-1.png)
 
-The potential effect of JDAP adoption on authors' attitudes is might be confounded by two other factors. Firstly, groups of researchers publishing in journals which are not planning to adopt the JDAP (or at least have not done so yet) may inherently differ from groups publishing in journals which were open to adopting the JDAP. Secondly, attitudes regarding data archiving may improve over time.
+The following plots show the responses regarding the attitudes towards data sharing and archiving for participants who (i) published in journals which have note adopted the JDAP so far ('No JDAP'), (ii) published in journals which had not *yet* adopted the JDAP before publication ('Before JDAP'), and (iii) journals which had adopted the JDAP after publication ('After JDAP).
 
-\[TODO: REPHASE PARAGRAPHS BELOW\]
+According to the model estimates, the introduction of the JDAP data archiving policy significantly increases the odds of a positive response regarding *data sharing* by a factor of 1.36 (CI=\[1.16; 1.60\]), while publishing date and whether the journal ever adopted a JDAP policy did not show any statistically significant effects. The estimated coefficients and confidence intervals are shown below.
 
-In order to test for an effect of policy change on attitudes while controlling for potential confounding effects, we used an ordinal logistic regression model with three predictors: (i) journal type *(cNonJDAPJournal)*, (ii) (centered) publication date in years *(cDate)*, and (iii) a variable indicating whether the article was published after the the journal adopted a data archiving policy *(cAfterPolicyChange)*.
-
-The following table shows the estimated coefficients and 95%-confidence intervals (transformed to odds ratios) for responses to *question 1*. Effects are statistically significant at the *α* = 0.05 level when the transformed confidence intervals do not contain 1. Confidence intervals were obtained by profile likelihood. According to the model estimates, the introduction of the JDAP data archiving policy significantly increases the odds of a positive response regarding *data sharing* by a factor of 1.36 (CI=\[1.16; 1.60\]), while the remaining two predictors do not show any statistically significant effects.
-
-We conducted two likelihood-ratio tests to assess the effect of change in policy and the other predictors on reported attitudes. The first likelihood-ratio test, comparing the full three-predictor model with a reduced model *without* the effect of policy change revealed a significantly better fit for the full model (*χ*<sup>2</sup>(1)=79.38, *p* &lt; 0.001). A second likelihood-ratio test comparing the full model with a reduced model using *only* the policy change predictor (*cAfterPolicyChange*) revealed no statistically significantly difference (*χ*<sup>2</sup>(2)=7.76, *p* = 0.02).
+The result of two likelihood-ratio tests supported these findings. The first likelihood-ratio test, comparing the full three-predictor model to a reduced model *without* the effect of policy change revealed a significantly better fit for the full model (*χ*<sup>2</sup>(1)=79.38, *p* &lt; 0.001), suggesting that the date of publication and whether a journal adopted JDAP are not as important in to an author's opinion about *data sharing* the data as whether the author published after a JDAP policy was introduced.
 
 <!-- http://kbroman.org/knitr_knutshell/pages/figs_tables.html -->
 |                    |    OR|  2.5 %|  97.5 %|     t|
@@ -205,9 +204,9 @@ We conducted two likelihood-ratio tests to assess the effect of change in policy
 | cNonJDAPJournal    |  1.15|   1.00|    1.32|   2.0|
 | cDate              |  0.93|   0.88|    0.99|  -2.3|
 
-Similarily, the following table shows the estimated coefficients and 95%-confidence intervals (transformed to odds ratios) for responses to *question 2*. According to the model estimates, the introduction of the JDAP data archiving policy significantly increases the odds of a positive response regarding *data archiving* by a factor of 1.57 (CI=\[1.33; 1.90\]), while the remaining two predictors do not show any statistically significant effects.
+We found the similar results when we looked at the author's responses to community norms about *data archiving* rather than data sharing. The following table shows the estimated coefficients and 95%-confidence intervals (transformed to odds ratios). According to the model estimates, the introduction of the JDAP data archiving policy significantly increases the odds of a positive response regarding *data archiving* by a factor of 1.57 (CI=\[1.33; 1.90\]). Being a nonJDAP journal is a significant predictor in this case, though with a much lower odds ratio.
 
-Here too, we conducted two likelihood-ratio tests to assess the effect of change in policy and the other predictors on reported attitudes. The first likelihood-ratio test, comparing the full three-predictor model with a reduced model *without* the effect of policy change revealed a significantly better fit for the full model (*χ*<sup>2</sup>(1)=148.35, *p* &lt; 0.001). A second likelihood-ratio test comparing the full model with a reduced model using *only* the policy change predictor (*cAfterPolicyChange*) revealed no statistically significantly difference (*χ*<sup>2</sup>(2)=9.37, *p* = 0.01).
+Comparing the full three-predictor model with a reduced model *without* the effect of policy change revealed a significantly better fit for the full model (*χ*<sup>2</sup>(1)=148.35, *p* &lt; 0.001), indicating again that the policy change was a statistically significant predictor of the author's responses about data archiving attitudes.
 
 |                    |    OR|  2.5 %|  97.5 %|      t|
 |--------------------|-----:|------:|-------:|------:|
@@ -343,25 +342,25 @@ There were 356 free text comments. A few representative ones:
 Discussion
 ==========
 
-data policies are becoming more prevalent: seven journals announced data archiving mandates during the course of the survey (and another three journals implemented policies shortly after the suvey completed).
+We found that more authors believed that data sharing and data archiving were norms in their field after they published in a journal with a JDAP policy.
+
+Data archiving policies are becoming more prevalent: seven journals announced data archiving mandates during the course of the survey (and another three journals implemented policies shortly after the suvey completed).
 
 even so, a minority of journal policies require data sharing (Naughton L, 2016; Vasilevsky et al., 2017)
 
-Even when there are journal policies, often not sufficient to achieve reproducability for the majority of studies (Roche et al., 2015; Naudet et al., 2018; Stodden, Seiler, & Ma, 2018)
+Journal policies do help (Alsheikh-Ali et al., 2011; Piwowar, 2011; Vines et al., 2013), though often not sufficient to achieve data availability for the majority of studies (Alsheikh-Ali et al., 2011; Piwowar, 2011; Roche et al., 2015; Naudet et al., 2018; Stodden, Seiler, & Ma, 2018).
 
-suggesting author personality (Linek et al., 2017) or social norms (Anagnostou et al., 2015; Womack, 2015) may play a larger factor than journal policy.
-
-Findings here are consistent with other findings that authors more likely to share data if they had prior experience sharing or reusing data (Piwowar, 2011).
+This suggests author personality (Linek et al., 2017) or social norms (Anagnostou et al., 2015; Womack, 2015) may play a larger factor.
 
 Could be helpful for journals to help spread the word about worries that are unfounded. For example, authors are worried about scooping, but it rarely happens -- almost all of an author's papers about one of their own datasets occur within two years of its collection, whereas third-party papers are still accumulating six years later (H. A. Piwowar & Vision, 2013). In areas where this is less true, journal policies could be modified to support it (Sturges et al., 2015; Whitlock et al., 2016)
 
-Similarily, although of course data archiving has a cost, it also has a good return on investment in terms of research output (H. A. Piwowar, Vision, & Whitlock, 2011).
+Similarily, the free text comments suggested authors are concerned about the cost of data archiving. It may help to spread the word that money research funders spend on data archiving is good return on investment in terms of research output (H. A. Piwowar, Vision, & Whitlock, 2011).
 
 The longitudinal study nature of this study is useful -- comparing across journals is frought, as stronger data archiving policies are disproportionately found in higher impact journals (HA Piwowar & Chapman, 2008; Vasilevsky et al., 2017).
 
-cite this? (Van Tuyl & Whitmire, 2016). also maybe this? (Fetterman & Sassenberg, 2015).
+Our findings are consistent with previous studies that found authors were more likely to share data if they had prior experience sharing or reusing data: (Piwowar, 2011).
 
-still pulling these in to discussion notes (Alsheikh-Ali et al., 2011; Pearce & Smith, 2011; Vines et al., 2013; Budin-Ljøsne et al., 2014; Lin & Strasser, 2014; Roche et al., 2014)
+Several recommendations have been made for journals seeking to form a data archiving policy (Lin & Strasser, 2014; Roche et al., 2014; Sturges et al., 2015; Van Tuyl & Whitmire, 2016)
 
 Limitations of this study include:
 
@@ -383,6 +382,7 @@ Data availability
 -   [Full text comments](https://github.com/hpiwowar/jdap/blob/master/data/full_text_comments.txt)
 -   [Contact corresponding authors scripts](https://github.com/hpiwowar/contact_corresponding)
 -   [Manuscript R files](https://github.com/hpiwowar/jdap)
+-   [News blog about the study](https://studyonimpactofjournaldatapolicies.wordpress.com/)
 
 Acknowlegements
 ===============
@@ -413,8 +413,6 @@ Blumenthal, D., Campbell, E., Gokhale, M., Yucel, R., Clarridge, B., Hilgartner,
 
 Brown, C. 2003. *The changing face of scientific discourse: Analysis of genomic and proteomic database usage and acceptance*. Journal of the American Society for Information Science and Technology.
 
-Budin-Ljøsne, I., Isaeva, J., Knoppers, B. M., Tassé, A. M., Shen, H.-y., McCarthy, M. I., Harris, J. R., & ENGAGE Consortium. 2014. *Data sharing in large research consortia: Experiences and recommendations from engage*. Eur J Hum Genet 22(3):317–21.
-
 Campbell, E. G., & Bendavid, E. 2002. *Data-sharing and data-withholding in genetics and the life sciences: Results of a national survey of technology transfer officers*. Journal of Health Care Law and Policy 6:241.
 
 Campbell, E., Clarridge, B., Gokhale, M., Birenbaum, L., Hilgartner, S., Holtzman, N., & Blumenthal, D. 2002. *Data withholding in academic genetics: evidence from a national survey*. JAMA 287(4):473–480. Journal article.
@@ -422,8 +420,6 @@ Campbell, E., Clarridge, B., Gokhale, M., Birenbaum, L., Hilgartner, S., Holtzma
 Campbell, P. 2008. *What are the ethical and social responsibilities of scientists?* Nature Precedings.
 
 Enriquez, V., Judson, S. W., Weber, N. M., Allard, S., Cook, R. B., Piwowar, H. A., Sandusky, R. J., Vision, T. J., & Wilson, B. 2010. *Data citation in the wild*. Unknown journal.
-
-Fetterman, A. K., & Sassenberg, K. 2015. *The reputational consequences of failed replications and wrongness admission among scientists*. PLoS One 10(12):e0143723.
 
 Foster, M., & Sharp, R. 2007. *Share and share alike: deciding how to distribute the scientific and social benefits of genomic data*. Nat Rev Genet 8(8):633–639. Journal article.
 
@@ -454,8 +450,6 @@ Naughton L, K. D. 2016. *Making sense of journal research data policies*. Insigh
 Noor, M., Zimmerman, K., & Teeter, K. 2006. *Data Sharing: How Much Doesn’t Get Submitted to GenBank?* PLoS Biol 4(7).
 
 Ochsner, S., Steffen, D., Stoeckert, C., & McKenna, N. 2008. *Much room for improvement in deposition rates of expression microarray datasets*. Nature Methods 5(12). Journal article.
-
-Pearce, N., & Smith, A. H. 2011. *Data sharing: Not as simple as it seems*. Environ Health 10:107.
 
 Piwowar, H. A. 2011. *Who shares? Who doesn’t? Factors associated with openly archiving raw research data*. (C. Neylon, Ed.)PLoS ONE 6(7):e18657.
 
