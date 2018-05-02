@@ -4,14 +4,14 @@ title: Influence of journal data archiving mandates on author attitudes, experie
 author: "Heather A. Piwowar, Todd J. Vision"
 csl: peerj.csl
 output:
-  md_document:
-    variant: markdown_github
   html_document:
     css: style.css
     fig_caption: yes
     keep_md: yes
     number_sections: yes
     toc: yes
+  md_document:
+    variant: markdown_github
   pdf_document:
     fig_caption: yes
     number_sections: yes
@@ -741,6 +741,10 @@ bib["doi:10.1002/asi.23336"],
 bib["van-tuyl2016water-w"],
 bib["roche2014trouble"],
 bib["lin2014recomme"]))`
+
+Also work in these:
+- The influence of journal submission guidelines on authors' reporting of statistics and use of open research practices: bib["giofre2017the-inf"]
+- Journal Data Sharing Policies and Statistical Reporting Inconsistencies in Psycholog: bib["nuijten"]
 
 
 Limitations of this study include:
