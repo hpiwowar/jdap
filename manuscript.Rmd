@@ -1,23 +1,22 @@
 ---
-title: Influence of journal data archiving mandates on author attitudes, experiences,
-  and practices
+title: Influence of journal data archiving mandates on author attitudes, experiences, and practices
 author: "Heather A. Piwowar, Todd J. Vision"
 csl: peerj.csl
 output:
-  word_document:
-    fig_caption: yes
-  md_document:
-    variant: markdown_github
-  pdf_document:
-    fig_caption: yes
-    number_sections: yes
-    toc: yes
   html_document:
     css: style.css
     fig_caption: yes
     keep_md: yes
     number_sections: yes
     toc: yes
+  md_document:
+    variant: markdown_github
+  pdf_document:
+    fig_caption: yes
+    number_sections: yes
+    toc: yes
+  word_document:
+    fig_caption: yes
 bibliography: input_references.bib
 ---
 
@@ -30,24 +29,18 @@ bib=read.bibtex("input_references.bib")
 
 # Abstract
 
-Several journals adopted the Joint Data Archiving Policy in early 2011, as described at http://datadryad.org/jdap.
+INTRODUCTION: Some journals require that their authors share the raw data behind their analyses, but little is known about how the introduction of these mandates affects the attitudes, experiences, and behaviour of authors.
 
-This was a great opportunity to study the effect of journal data sharing mandates on the attitudes, behaviour, experiences of authors to help inform future policy decisions.
+OBJECTIVE: This study measures the correlation of journal data sharing policies with the data sharing attitudes, experiences, and behaviour of authors.
 
-The invitations were sent out monthly between February 2011 and March 2014 to a total of 23853 23853  authors, and 4102 4102 responded (corresponding to a response rate of 17%).
+METHODS: An online questionaire was sent to all corresponding authors of 48 journals in the fields of evolution, ecology, and general biology who published papers between November 2010 and March 2014. The online questionnaire was designed to measure the respondent’s practices, experiences, and opinions around public archiving of research datasets by asking about their opinion of community norms, recent behaviour with respect to a recently published paper, previous experiences with data sharing, and attitudes toward hypothetical journal policies.
 
-the introduction of the JDAP data archiving policy significantly increases the odds of a positive response regarding data sharing by a factor of 1.36
-1.36
- (CI=[1.16;1.60]
-1.16
-1.60
-), while publishing date and whether the journal ever adopted a JDAP policy did not show any statistically significant effects.
+RESULTS:  Survey invitations were sent out to 23,853 corresponding authors; 4,102 responded (response rate of 17%).  Twenty-one of the journals had adopted a journal sharing requirement by the time the survey was completed.  We found the introduction of a data archiving policy significantly increased the respodent's belief that data sharing was a community norm, whereas publishing date and whether the journal ever adopted a data sharing policy did not show any statistically significant effects.  In exploratory analysis, the introduction of a journal data policy was correlated with a decrease in worries about "scooping", and increased the feeling that data archiving policies was "the right thing to do."  
 
+CONCLUSION: This study suggests that although journals may be afraid that data archiving policies will be met with resentment and a backlash from their authors, the attitudes of autohrs after policies go into effect is positive and the policies serve to increase and normalize data sharing within their disciplines.
 
-We found the similar results when we looked at the author’s responses to community norms about public data archiving rather than peer-to-peer data sharing
+DATA AVAILABILITY:  The data from this study is publicly available.
 
-
-this study only facilitates a relatively short-term look at policy effect: it will likely take many more years for the effect of these policies to be fully felt.
 
 
 # Introduction
